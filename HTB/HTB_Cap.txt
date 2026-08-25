@@ -1,1 +1,61 @@
+HackTheBox:
+CAP machine:
+Date:16 August 2026
+Name:Shaurya Harkar
+Target IP: 10.129.74.58
+Attacker IP:10.10.14.226
+We start enumeration by pinging to the target IP:
+The host is live, now we use nmap to see which ports are
+open:
+Now trying to connect to ftp service to see if
+anonymous login is enabled:
+No anonymous login is not enabled.Port 80 is also
+open which means the IP is serving an http page so
+we browse to the http page:
+In the Network Status Tab, the output of netstat
+showed, so it must be running ssh command on the
+host server.
+In the security snapshots we find downloadable pcap
+files of different users . In the site there is an
+IDOR(Insecure Direct object reference) and we try to
+download the pcap files of different users, we analyse
+the pcap files of users 1,2,5,0 in wireshark and we
+get the sensitive credentials of nathan(user) in the tcp
+connections made:
+So the credentials worked for ssh also.
+The machine has no internet access:
+To check the paths to root access we have to use
+linPEAS(linux Privilege Escalation Awesome Script)
+that helps us to find things like SUID(allows us to run
+commands with the owners permissions) to gain root
+access.
+But the target has no internet connection, so we
+create a python server on the attacker machine so
+that the target machine can connect and run linpeas.
+So we make a directory on the attacker machine and
+save the executable linpeas.sh in it, and start the
+server on port 80(attacker machine) and wait for the
+target to connect:
+Now with the target machine we connect to the
+server on port 80 so that the linpeas script can start
+and find paths to root:
+It identified two interesting findings:
+1)CVE 2026-41651(Pack2TheRoot): PackageKit
+1.1.13-2ubuntu1.1
+2)/usr/bin/python3.8 =
+cap_setuid,cap_net_bind_service+eip
+This capability given by the owner to python3.8
+allows it to change the UID of the user, we will be
+using this to escalate privilege.
+We make the python script in the home directory:
+And tell the interpreter python3.8 to change the UID
+to 0 by running:
+Now we have got the root to the target machine.
 
+
+FLAGS:
+1)(/home/nathan of user nathan)
+FIRST FLAG:ecadc1aa81b54af38dddfbf8effb7daa
+2)(/root of root user)
+SECOND
+FLAG:75bd7dbaccc4b6bfb79689182c52d293
