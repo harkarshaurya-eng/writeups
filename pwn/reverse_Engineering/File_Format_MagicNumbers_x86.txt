@@ -1,0 +1,35 @@
+//finding magic number in x86
+//solve like this 
+
+
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/$ cd /challenge
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/challenge$ ls
+DESCRIPTION.md  cimg
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/challenge$ file cimg
+cimg: setuid ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=a3325d2fb7242102e410168a63055c078b0e6e18, for GNU/Linux 3.2.0, not stripped
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/challenge$ objdump -d -M intel ./cimg | grep -E 'cmp.*0x'
+  401275:	48 3d 10 40 40 00    	cmp    rax,0x404010
+  4012e4:	80 3d 5d 2d 00 00 00 	cmp    BYTE PTR [rip+0x2d5d],0x0        # 404048 <completed.8061>
+  401350:	83 bd e8 fe ff ff 00 	cmp    DWORD PTR [rbp-0x118],0x0
+  4013c8:	83 bd ec fe ff ff 00 	cmp    DWORD PTR [rbp-0x114],0x0
+  401478:	3b 45 e8             	cmp    eax,DWORD PTR [rbp-0x18]
+  401535:	83 7d dc 01          	cmp    DWORD PTR [rbp-0x24],0x1
+  4015de:	3c 43                	cmp    al,0x43
+  4015e6:	3c 4e                	cmp    al,0x4e
+  4015ee:	3c 4d                	cmp    al,0x4d
+  4015f6:	3c 67                	cmp    al,0x67
+  401610:	83 7d e0 00          	cmp    DWORD PTR [rbp-0x20],0x0
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/challenge$ pushd /tmp
+/tmp /challenge
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/tmp$ printf '\x43\x4e\x4d\x67' >solve.cimg
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/tmp$ ls
+bin  hsperfdata_root  solve.cimg  tmp.hYVUanCOAv
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/tmp$ xxd solve.cimg 
+00000000: 434e 4d67                                CNMg
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/tmp$ popd
+/challenge
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/challenge$ ./cimg /tmp/solve.cimg 
+pwn.college{ocUl76yzSb13ppRBH6ZmBct-Wo7.0FMwMDMxwCN2cDOxIzW}
+
+
+hacker@reverse-engineering~file-formats-magic-numbers-x86:/challenge$ 
