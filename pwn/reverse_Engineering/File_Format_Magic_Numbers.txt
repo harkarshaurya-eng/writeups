@@ -1,0 +1,52 @@
+// Magic numbers: A magic number is a specific sequence of bytes placed at a known location, usually at the beginning of a file, that identifies the files format or type.
+
+// flow to solve 
+
+hacker@reverse-engineering~file-formats-magic-numbers-python:~$ cd /challenge
+hacker@reverse-engineering~file-formats-magic-numbers-python:/challenge$ ls
+DESCRIPTION.md  cimg
+hacker@reverse-engineering~file-formats-magic-numbers-python:/challenge$ file cimg
+cimg: setuid Python script, ASCII text executable
+hacker@reverse-engineering~file-formats-magic-numbers-python:/challenge$ cat cimg
+#!/usr/bin/exec-suid -- /usr/bin/python3 -I
+
+import os
+import sys
+from collections import namedtuple
+
+Pixel = namedtuple("Pixel", ["ascii"])
+
+
+def main():
+    if len(sys.argv) >= 2:
+        path = sys.argv[1]
+        assert path.endswith(".cimg"), "ERROR: file has incorrect extension"
+        file = open(path, "rb")
+    else:
+        file = sys.stdin.buffer
+
+    header = file.read1(4)
+    assert len(header) == 4, "ERROR: Failed to read header!"
+
+    assert header[:4] == b"{:m6", "ERROR: Invalid magic number!"
+
+    with open("/flag", "r") as f:
+        flag = f.read()
+        print(flag)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except AssertionError as e:
+        print(e, file=sys.stderr)
+        sys.exit(-1)
+hacker@reverse-engineering~file-formats-magic-numbers-python:/challenge$ cd /tmp
+hacker@reverse-engineering~file-formats-magic-numbers-python:/tmp$ python -c 'print("{:m6".encode().hex())'
+7b3a6d36
+hacker@reverse-engineering~file-formats-magic-numbers-python:/tmp$ printf '\x7b\x3a\x6d\x36' >solve.cimg
+hacker@reverse-engineering~file-formats-magic-numbers-python:/tmp$ cd /challenge
+hacker@reverse-engineering~file-formats-magic-numbers-python:/challenge$ ./cimg /tmp/solve.cimg
+""  pwn.college{gTFzzlFH3w_955mTDJtflItWxBa.0VNwUjNxwCN2cDOxIzW}  ""
+
+hacker@reverse-engineering~file-formats-magic-numbers-python:/challenge$ 
