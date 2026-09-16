@@ -1,0 +1,51 @@
+// compiling the assembly to binaries to be executed
+
+ubuntu@assembly~building-executables:/$ cd /challenge
+ubuntu@assembly~building-executables:/challenge$ ls
+bin  check
+ubuntu@assembly~building-executables:/challenge$ file check 
+check: setuid Python script, ASCII text executable
+ubuntu@assembly~building-executables:/challenge$ pushd /tmp
+/tmp /challenge /challenge
+ubuntu@assembly~building-executables:/tmp$ nano solve.s
+ubuntu@assembly~building-executables:/tmp$ ls
+solve.s
+ubuntu@assembly~building-executables:/tmp$ cat solve.s 
+.intel_syntax noprefix
+.global _start
+_start:
+mov rax,60
+mov rdi,42
+syscall
+ubuntu@assembly~building-executables:/tmp$ as -o solve.o solve.s
+ubuntu@assembly~building-executables:/tmp$ ls
+solve.o  solve.s
+ubuntu@assembly~building-executables:/tmp$ ld -o solve solve.o
+ubuntu@assembly~building-executables:/tmp$ ls
+solve  solve.o  solve.s
+ubuntu@assembly~building-executables:/tmp$ popd
+/challenge /challenge
+ubuntu@assembly~building-executables:/challenge$ ./check /tmp/solve
+
+Checking the assembly code...
+... YES! Great job!
+
+Let's check what your exit code is! It should be 42 to succeed!
+
+Go go go!
+
+hacker@assembly~building-executables:/challenge$ /tmp/solve
+hacker@assembly~building-executables:/challenge$ echo $?
+42
+hacker@assembly~building-executables:/challenge$ 
+
+Neat! Your program exited with the correct error code! But what
+if it hadn't? Next, we'll learn about some simple debugging.
+For now, take this with you:
+
+
+
+Here is your flag!
+pwn.college{4sJVDQEH9IYSC_PJzX-IB4KRV-u.0FM3IDMxwCN2cDOxIzW}
+
+ubuntu@assembly~building-executables:/challenge$ 
