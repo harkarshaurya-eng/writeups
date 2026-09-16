@@ -1,0 +1,41 @@
+// Exit with code 42 using rdi register 
+
+
+ubuntu@assembly~exit-codes:~$ cd /challenge
+ubuntu@assembly~exit-codes:/challenge$ ls
+bin  check
+ubuntu@assembly~exit-codes:/challenge$ file check 
+check: setuid Python script, ASCII text executable
+ubuntu@assembly~exit-codes:/challenge$ cd /tmp
+ubuntu@assembly~exit-codes:/tmp$ nano solve.s
+ubuntu@assembly~exit-codes:/tmp$ cd /challenge
+ubuntu@assembly~exit-codes:/challenge$ ./check /tmp/solve.s 
+
+Checking the assembly code...
+... YES! Great job!
+
+Let's check what your exit code is! It should be 42 to succeed!
+
+Go go go!
+
+hacker@assembly~exit-codes:/challenge$ /tmp/solve.s
+hacker@assembly~exit-codes:/challenge$ echo $?
+42
+hacker@assembly~exit-codes:/challenge$ 
+
+Neat! Your program exited with the correct error code! But in this level,
+we built the executable for you. Next, you'll learn how to build the executable
+yourself, and then you'll be ready to walk the path of Assembly!
+
+For now, take this with you:
+
+
+
+Here is your flag!
+pwn.college{4U5jWi_n8VV_MUos3mW0AgDz6D0.QXwcDO1wCN2cDOxIzW}
+
+ubuntu@assembly~exit-codes:/challenge$ cat /tmp/solve.s 
+mov rax,60
+mov rdi,42
+syscall
+ubuntu@assembly~exit-codes:/challenge$ 
