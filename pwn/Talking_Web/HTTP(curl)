@@ -1,0 +1,28 @@
+//using CURL
+//solve like this 
+
+
+hacker@talking-web~http-curl:/$ cd /challenge
+hacker@talking-web~http-curl:/challenge$ ls
+bin  run
+hacker@talking-web~http-curl:/challenge$ file bin
+bin: directory
+hacker@talking-web~http-curl:/challenge$ file run
+run: setuid Python script, ASCII text executable
+hacker@talking-web~http-curl:/challenge$ ./run
+Make an HTTP request to 127.0.0.1 on port 80 to get the flag
+You must make this request using the curl command
+
+The following output is from the server, might be useful in helping you debug:
+------------------------------------------------
+ * Serving Flask app 'run'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:80
+Press CTRL+C to quit
+/challenge/run:35: DeprecationWarning: connections() is deprecated and will be removed; use net_connections() instead
+  for connection in psutil.Process().connections()
+127.0.0.1 - - [16/Sep/2026 03:01:51] "GET / HTTP/1.1" 200 -
+^Chacker@talking-web~http-curl:/challenge$ curl 127.0.0.1:80
+pwn.college{0itGOAsdb2pq_rUfXbNhGzqSX4l.QX4YjMzwCN2cDOxIzW}
+hacker@talking-web~http-curl:/challenge$ 
