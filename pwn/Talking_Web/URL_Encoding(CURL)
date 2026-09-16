@@ -1,0 +1,55 @@
+//URL encoding through CURL 
+
+URL encoding represents characters using their percent-encoded byte value.
+
+For example:
+
+Character	    URL encoded
+
+space        	  %20
+!	              %21
+#	              %23
+$	              %24
+&	              %26
+?	              %3F
+@	              %40
+
+the given path:  /7b72e6a1 891fc8dc/6fe2100e 9a82d964 give spaces using %20
+
+//solve like this 
+
+hacker@talking-web~url-encoding-curl:~$ cd /challenge
+hacker@talking-web~url-encoding-curl:/challenge$ ls
+bin  run
+hacker@talking-web~url-encoding-curl:/challenge$ file run 
+run: setuid Python script, ASCII text executable
+hacker@talking-web~url-encoding-curl:/challenge$ ./run 
+Make an HTTP request to 127.0.0.1 on port 80 to get the flag.
+The path of the HTTP request must be /7b72e6a1 891fc8dc/6fe2100e 9a82d964
+You must make this request using the curl command
+
+The following output is from the server, might be useful in helping you debug:
+------------------------------------------------
+ * Serving Flask app 'run'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:80
+Press CTRL+C to quit
+^Chacker@talking-web~url-encoding-curl:/challenge$ curl "http://127.0.0.1:80/7b72e6a1 891fc8dc/6fe2100e 9a82d964"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>Error response</title>
+    </head>
+    <body>
+        <h1>Error response</h1>
+        <p>Error code: 400</p>
+        <p>Message: Bad request syntax ('GET /7b72e6a1 891fc8dc/6fe2100e 9a82d964 HTTP/1.1').</p>
+        <p>Error code explanation: HTTPStatus.BAD_REQUEST - Bad request syntax or unsupported method.</p>
+    </body>
+</html>
+hacker@talking-web~url-encoding-curl:/challenge$ curl "http://127.0.0.1:80/7b72e6a1%20891fc8dc/6fe2100e%209a82d964"
+pwn.college{gYvV_lef1j5gb0M25TYih-1V6qs.QX3cjMzwCN2cDOxIzW}
+hacker@talking-web~url-encoding-curl:/challenge$ 
