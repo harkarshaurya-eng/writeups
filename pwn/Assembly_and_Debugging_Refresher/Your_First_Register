@@ -1,0 +1,42 @@
+// basic assembly code
+
+
+ubuntu@assembly~your-first-register:/$ cd /challenge
+ubuntu@assembly~your-first-register:/challenge$ ls
+bin  check
+ubuntu@assembly~your-first-register:/challenge$ file check 
+check: setuid Python script, ASCII text executable
+ubuntu@assembly~your-first-register:/challenge$ pushd /tmp
+/tmp /challenge
+ubuntu@assembly~your-first-register:/tmp$ nano solve.s 
+ubuntu@assembly~your-first-register:/tmp$ cat solve.s 
+mov rax,60
+ubuntu@assembly~your-first-register:/tmp$ popd
+/challenge
+ubuntu@assembly~your-first-register:/challenge$ ./check /tmp/solve.s 
+
+Checking the assembly code...
+... YES! Great job!
+
+
+Congratulations, you have written your first program!
+Now let's see what happens when the checker runs the assembled program:
+
+hacker@assembly~your-first-register:/challenge$ /tmp/assembled-program
+Segmentation fault
+hacker@assembly~your-first-register:/challenge$ 
+
+... uh oh. The program crashed! We'll go into more details about
+what a Segmentation Fault is later, but in this case, the program
+crashed because, after the CPU moved the value 60 into rax, it was
+never instructed to stop execution. With no further instructions
+to execute, and no directive to stop, it crashed.
+
+In the next level, we'll learn about how to stop program execution.
+For now, here is your flag for your first (crashing) program!
+
+
+Here is your flag!
+pwn.college{EFxVD50y10EmCaObqrZkNP8aGRz.QXzQDO1wCN2cDOxIzW}
+
+ubuntu@assembly~your-first-register:/challenge$ 
