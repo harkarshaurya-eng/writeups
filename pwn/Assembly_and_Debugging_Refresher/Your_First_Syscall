@@ -1,0 +1,39 @@
+// Basic syscall function 
+
+ubuntu@assembly~your-first-syscall:~$ cd /challenge
+ubuntu@assembly~your-first-syscall:/challenge$ ls
+bin  check
+ubuntu@assembly~your-first-syscall:/challenge$ file check 
+check: setuid Python script, ASCII text executable
+ubuntu@assembly~your-first-syscall:/challenge$ pushd /tmp
+/tmp /challenge
+ubuntu@assembly~your-first-syscall:/tmp$ nano solve.s
+ubuntu@assembly~your-first-syscall:/tmp$ ls
+solve.s
+ubuntu@assembly~your-first-syscall:/tmp$ cat solve.s 
+mov rax,60
+syscall
+ubuntu@assembly~your-first-syscall:/tmp$ popd
+/challenge
+ubuntu@assembly~your-first-syscall:/challenge$ ./check /tmp/solve.s 
+
+Checking the assembly code...
+... YES! Great job!
+
+Okay, now you have written your first COMPLETE program!
+All it'll do is exit, but it'll do so cleanly, and we can
+build from there!
+
+Let's see what happens when you run it:
+
+hacker@assembly~your-first-syscall:/challenge$ /tmp/solve.s
+hacker@assembly~your-first-syscall:/challenge$ 
+
+Neat! Your program exited cleanly! Let's push on to make things
+more interesting! Take this with you:
+
+
+Here is your flag!
+pwn.college{46LAxK2CDswzf7pjgwNfLazSSz0.QX4YDO1wCN2cDOxIzW}
+
+ubuntu@assembly~your-first-syscall:/challenge$ 
