@@ -1,0 +1,19 @@
+// Unprotected admin functionality with unpredictable URL
+
+URL: https://0a32009903195c8a81822feb001000cc.web-security-academy.net/admin-egax5i
+
+Step1: Open the PortSwigger lab and explore the website normally. Look through the pages and inspect the source code of the home page.
+
+Step2: While inspecting the source code, look for JavaScript code that contains a reference to an admin panel.
+
+Step3: Find the JavaScript code that reveals the administrator panel URL. The URL is unpredictable, so it would be difficult to guess directly.
+
+Step4: Copy the administrator panel endpoint from the source code and add it to the lab URL.
+
+Step5: Open the discovered administrator panel. Notice that the admin functionality is accessible without any authentication or authorization.
+
+Step6: In the administrator panel, find the user `carlos` and delete the user.
+
+Step7: After deleting `carlos`, the lab will be solved.
+
+Step8: Congratulations!! you have solved this problem!!
