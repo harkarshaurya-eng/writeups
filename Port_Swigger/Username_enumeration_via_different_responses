@@ -1,0 +1,44 @@
+// Username enumeration via different responses
+
+URL: https://0aff00a504ee97808006e95b00ce0087.web-security-academy.net/login
+
+Step1: Open the PortSwigger lab and navigate to the login page.
+
+Step2: Open Burp Suite and capture the login request by entering any username and password.
+
+Step3: Send the `POST /login` request to Burp Intruder.
+
+Step4: Select the **Sniper** attack type and mark only the username parameter:
+
+        username=§test§&password=test
+
+Step5: Go to the Payloads tab and paste the **Candidate usernames** provided by PortSwigger.
+
+Step6: Start the attack and compare the responses. Most invalid usernames return a response indicating:
+
+        Invalid username
+
+One username produces a different response:
+
+        as400
+
+Step7: This indicates that `as400` is a valid username.
+
+Step8: Keep the username fixed and move the payload position to the password:
+
+        username=as400&password=§test§
+
+Step9: Use the **Candidate passwords** list provided by PortSwigger and start the attack again.
+
+Step10: Compare the responses and identify the password that produces the successful login response.
+
+Step11: The valid credentials are:
+
+        Username: as400
+        Password: 123qwe
+
+Step12: Log in to the lab using these credentials.
+
+Step13: After successfully logging in, the lab is solved.
+
+Step14: Congratulations!! you have solved this problem!!
