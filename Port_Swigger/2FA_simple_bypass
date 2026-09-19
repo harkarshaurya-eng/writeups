@@ -1,0 +1,35 @@
+// 2FA simple bypass
+
+URL: https://0a7e00ec032e416b803e80d800c60038.web-security-academy.net/my-account
+
+Step1: Open the PortSwigger lab and log in using your own credentials:
+
+        Username: wiener
+        Password: peter
+
+Step2: After logging in, complete the 2FA verification using the code sent to your email. Click the `Email client` button to access the email.
+
+Step3: After successfully completing 2FA, open your account page:
+
+        /my-account
+
+Step4: Make a note of the account page URL, then log out.
+
+Step5: Log in using the victim's credentials:
+
+        Username: carlos
+        Password: montoya
+
+Step6: The application now asks for Carlos's 2FA verification code. We don't have access to this code.
+
+Step7: Instead of entering a 2FA code, manually change the URL in the browser to:
+
+        /my-account
+
+Step8: Press Enter and check whether the account page loads without completing the 2FA verification.
+
+Step9: The account page of Carlos is now accessible, showing that the 2FA protection can be bypassed.
+
+Step10: The lab is solved.
+
+Step11: Congratulations!! you have solved this problem!!
