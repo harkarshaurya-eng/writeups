@@ -1,0 +1,34 @@
+// User role controlled by request parameter
+
+URL: https://0ae000f103a487f684833d3f00e50035.web-security-academy.net
+
+Step1: Open the PortSwigger lab and try accessing the `/admin` endpoint. Notice that access to the administrator panel is denied.
+
+Step2: Log in to the application using the provided credentials:
+
+        Username: wiener
+        Password: peter
+
+Step3: Open Burp Suite and capture the requests and responses generated while logging in.
+
+Step4: Inspect the login response and look at the `Set-Cookie` header. Notice that the application sets an `Admin` cookie with the value:
+
+        Admin=false
+
+Step5: Send the relevant request to Burp Repeater and change the cookie value from:
+
+        Admin=false
+
+        TO:
+
+        Admin=true
+
+Step6: Send the modified request and then request the `/admin` endpoint again.
+
+Step7: The administrator panel is now accessible because the application trusts the user-controlled `Admin` parameter.
+
+Step8: In the administrator panel, find the user `carlos` and delete the user.
+
+Step9: After deleting `carlos`, the lab will be solved.
+
+Step10: Congratulations!! you have solved this problem!!
