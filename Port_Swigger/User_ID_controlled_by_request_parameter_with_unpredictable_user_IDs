@@ -1,0 +1,23 @@
+// User ID controlled by request parameter, with unpredictable user IDs
+
+URL: https://0aca008903591c488054588700d10052.web-security-academy.net/my-account?id=fe4fcbae-e239-4946-be7a-5363fc415330
+
+Step1: Open the PortSwigger lab and explore the website normally.
+
+Step2: Log in to the application using the provided credentials and look for any functionality related to user accounts.
+
+Step3: Open Burp Suite and capture the requests made while accessing the user account functionality.
+
+Step4: Inspect the requests and look for a parameter that contains the user ID, even though the user ID appears to be unpredictable.
+
+Step5: Send the relevant request to Burp Repeater for further testing.
+
+Step6: Modify the user ID parameter and replace it with the ID of another user, such as `carlos`.
+
+Step7: Send the modified request and inspect the response. If the application returns information belonging to the other user, the user ID can be controlled through the request parameter.
+
+Step8: Use this access to perform the required action on the `carlos` account and complete the lab.
+
+Step9: After the required action is completed, the lab will be solved.
+
+Step10: Congratulations!! you have solved this problem!!
