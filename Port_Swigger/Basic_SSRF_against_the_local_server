@@ -1,0 +1,35 @@
+// SSRF against a local server
+
+URL: https://0a410092039cb51682d6422300b900f4.web-security-academy.net/product?productId=5
+
+Step1: Open the PortSwigger lab and try to access the `/admin` endpoint directly.
+
+Step2: Notice that the administrator panel cannot be accessed directly.
+
+Step3: Open a product page and click on `Check stock`.
+
+Step4: Open Burp Suite and intercept the stock check request. Send the request to **Burp Repeater**.
+
+Step5: In the request, find the `stockApi` parameter:
+
+        stockApi=http://stock.weliketoshop.net:8080/product/stock/check?productId=1&storeId=2
+
+Step6: Change the `stockApi` value to:
+
+        http://localhost/admin
+
+Step7: Send the request and inspect the response. The response now contains the administrator panel, proving that the server can make requests to its own localhost.
+
+Step8: Read the returned HTML and find the delete URL:
+
+        http://localhost/admin/delete?username=carlos
+
+Step9: Change the `stockApi` parameter to:
+
+        http://localhost/admin/delete?username=carlos
+
+Step10: Send the request. The server makes the internal request and deletes the `carlos` user.
+
+Step11: Return to the PortSwigger lab and verify that the lab is solved.
+
+Step12: Congratulations!! you have solved this problem!!
