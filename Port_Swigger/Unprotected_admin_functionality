@@ -1,0 +1,23 @@
+// Unprotected admin functionality
+
+URL: https://0a56001b03a8304e8414147d00ec0042.web-security-academy.net/
+
+Step1: Open the PortSwigger lab and explore the website normally. Look through the available pages and functionality to understand how the website is structured.
+
+Step2: Try accessing the common `/admin` endpoint by adding `/admin` to the website URL.
+
+Step3: If `/admin` does not work, try accessing the `robots.txt` file by adding `/robots.txt` to the website URL.
+
+Step4: Inspect the `robots.txt` file and look for the `Disallow` entries. One of the entries reveals the administrative panel endpoint:
+
+        /administrator-panel
+
+Step5: Add `/administrator-panel` to the website URL and open the page.
+
+Step6: The administrative panel is accessible without any authentication, showing that the admin functionality is not properly protected.
+
+Step7: Find the user `carlos` in the administrative panel and delete the user.
+
+Step8: After deleting `carlos`, the lab will be solved.
+
+Step9: Congratulations!! you have solved this problem!!
