@@ -1,0 +1,29 @@
+// Bandit Level 2 → Level 3
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 2 server using SSH:
+
+        ssh bandit2@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 1.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: A file named `spaces in this filename` is present.
+
+Step5: Since the filename contains spaces, use quotes to specify the complete filename:
+
+        cat "spaces in this filename"
+
+Step6: The output is the password required to log in to the next level, `bandit3`.
+
+Step7: Use the obtained password to connect to the next level:
+
+        ssh bandit3@bandit.labs.overthewire.org -p 2220
+
+Step8: The Bandit Level 2 → Level 3 challenge is solved.
+
+Step9: Congratulations!! you have solved this problem!!
