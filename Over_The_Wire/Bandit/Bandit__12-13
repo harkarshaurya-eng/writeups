@@ -1,0 +1,51 @@
+// Bandit Level 12 → Level 13
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 12 server using SSH:
+
+        ssh bandit12@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 11.
+
+Step3: The file `data.txt` contains a hexdump of a repeatedly compressed file.
+
+Step4: Create a temporary working directory:
+
+        mkdir /tmp/bandit12
+
+Step5: Copy the `data.txt` file into the temporary directory:
+
+        cp data.txt /tmp/bandit12/
+
+Step6: Enter the temporary directory:
+
+        cd /tmp/bandit12
+
+Step7: Convert the hexdump back into its original binary form:
+
+        xxd -r data.txt data
+
+Step8: Use the `file` command to determine the compression format:
+
+        file data
+
+Step9: Rename the file according to the identified compression format and decompress it.
+
+Step10: Continue using the `file` command to identify the next compression format and decompress it repeatedly.
+
+Step11: Repeat this process until the final file is identified as ASCII text.
+
+Step12: Read the final file:
+
+        cat data
+
+Step13: The output is the password required to log in to the next level, `bandit13`.
+
+Step14: Use the obtained password to connect to the next level:
+
+        ssh bandit13@bandit.labs.overthewire.org -p 2220
+
+Step15: The Bandit Level 12 → Level 13 challenge is solved.
+
+Step16: Congratulations!! you have solved this problem!!
