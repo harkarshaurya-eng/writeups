@@ -1,0 +1,31 @@
+// Bandit Level 9 → Level 10
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 9 server using SSH:
+
+        ssh bandit9@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 8.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: A file named `data.txt` is present.
+
+Step5: We need to find the human-readable string preceded by several `=` characters.
+
+Step6: Use the `strings` command to extract readable strings from the file and search for the `=` characters:
+
+        strings data.txt | grep "==="
+
+Step7: The output contains the password required to log in to the next level, `bandit10`.
+
+Step8: Use the obtained password to connect to the next level:
+
+        ssh bandit10@bandit.labs.overthewire.org -p 2220
+
+Step9: The Bandit Level 9 → Level 10 challenge is solved.
+
+Step10: Congratulations!! you have solved this problem!!
