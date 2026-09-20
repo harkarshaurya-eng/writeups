@@ -1,0 +1,37 @@
+// Bandit Level 3 → Level 4
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 3 server using SSH:
+
+        ssh bandit3@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 2.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: The directory `inhere` is present. Enter the directory:
+
+        cd inhere
+
+Step5: List all files, including hidden files:
+
+        ls -la
+
+Step6: A hidden file named `.hidden` is present.
+
+Step7: Read the contents of the hidden file:
+
+        cat .hidden
+
+Step8: The output is the password required to log in to the next level, `bandit4`.
+
+Step9: Use the obtained password to connect to the next level:
+
+        ssh bandit4@bandit.labs.overthewire.org -p 2220
+
+Step10: The Bandit Level 3 → Level 4 challenge is solved.
+
+Step11: Congratulations!! you have solved this problem!!
