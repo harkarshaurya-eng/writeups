@@ -1,0 +1,35 @@
+// Bandit Level 6 → Level 7
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 6 server using SSH:
+
+        ssh bandit6@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 5.
+
+Step3: We need to find a file somewhere on the server with the following properties:
+
+        Owned by user: bandit7
+        Owned by group: bandit6
+        Size: 33 bytes
+
+Step4: Use the `find` command from the root directory with these conditions:
+
+        find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+
+Step5: The command finds the required file.
+
+Step6: Read the contents of the file using `cat`:
+
+        cat /var/lib/dpkg/info/bandit7.password
+
+Step7: The output is the password required to log in to the next level, `bandit7`.
+
+Step8: Use the obtained password to connect to the next level:
+
+        ssh bandit7@bandit.labs.overthewire.org -p 2220
+
+Step9: The Bandit Level 6 → Level 7 challenge is solved.
+
+Step10: Congratulations!! you have solved this problem!!
