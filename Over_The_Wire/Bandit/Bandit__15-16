@@ -1,0 +1,27 @@
+// Bandit Level 15 → Level 16
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 15 server using SSH:
+
+        ssh bandit15@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 14.
+
+Step3: The next password must be submitted to a service running on port `30001` using SSL/TLS.
+
+Step4: Use `openssl s_client` to establish an SSL connection to the service:
+
+        openssl s_client -connect localhost:30001
+
+Step5: Enter the password obtained from Bandit Level 14 and press Enter.
+
+Step6: The service returns the password required to log in to the next level, `bandit16`.
+
+Step7: Use the obtained password to connect to the next level:
+
+        ssh bandit16@bandit.labs.overthewire.org -p 2220
+
+Step8: The Bandit Level 15 → Level 16 challenge is solved.
+
+Step9: Congratulations!! you have solved this problem!!
