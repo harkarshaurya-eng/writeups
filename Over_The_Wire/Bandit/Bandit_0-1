@@ -1,0 +1,31 @@
+// Bandit Level 0 → Level 1
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Open the Bandit challenge and connect to the Bandit server using SSH:
+
+        ssh bandit0@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password:
+
+        bandit0
+
+Step3: After logging in, list the files in the current directory:
+
+        ls
+
+Step4: A file named `readme` is present.
+
+Step5: Read the contents of the file using:
+
+        cat readme
+
+Step6: The output is the password required to log in to the next level, `bandit1`.
+
+Step7: Use the displayed password to connect to the next level:
+
+        ssh bandit1@bandit.labs.overthewire.org -p 2220
+
+Step8: The Bandit Level 0 → Level 1 challenge is solved.
+
+Step9: Congratulations!! you have solved this problem!!
