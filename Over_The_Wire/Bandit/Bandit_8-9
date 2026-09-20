@@ -1,0 +1,31 @@
+// Bandit Level 8 → Level 9
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 8 server using SSH:
+
+        ssh bandit8@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 7.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: A file named `data.txt` is present.
+
+Step5: We need to find the only line that occurs exactly once in the file.
+
+Step6: Sort the contents of the file and use `uniq` to find the unique line:
+
+        sort data.txt | uniq -u
+
+Step7: The output is the password required to log in to the next level, `bandit9`.
+
+Step8: Use the obtained password to connect to the next level:
+
+        ssh bandit9@bandit.labs.overthewire.org -p 2220
+
+Step9: The Bandit Level 8 → Level 9 challenge is solved.
+
+Step10: Congratulations!! you have solved this problem!!
