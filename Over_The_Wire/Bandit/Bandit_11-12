@@ -1,0 +1,31 @@
+// Bandit Level 11 → Level 12
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 11 server using SSH:
+
+        ssh bandit11@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 10.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: A file named `data.txt` is present.
+
+Step5: The contents of the file are encrypted using ROT13.
+
+Step6: Use the `tr` command to replace each character with its ROT13 equivalent:
+
+        cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+
+Step7: The output is the password required to log in to the next level, `bandit12`.
+
+Step8: Use the obtained password to connect to the next level:
+
+        ssh bandit12@bandit.labs.overthewire.org -p 2220
+
+Step9: The Bandit Level 11 → Level 12 challenge is solved.
+
+Step10: Congratulations!! you have solved this problem!!
