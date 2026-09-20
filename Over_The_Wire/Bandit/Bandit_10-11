@@ -1,0 +1,31 @@
+// Bandit Level 10 → Level 11
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 10 server using SSH:
+
+        ssh bandit10@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 9.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: A file named `data.txt` is present.
+
+Step5: The contents of the file are encoded in Base64.
+
+Step6: Decode the contents of `data.txt` using the `base64` command:
+
+        base64 -d data.txt
+
+Step7: The decoded output is the password required to log in to the next level, `bandit11`.
+
+Step8: Use the obtained password to connect to the next level:
+
+        ssh bandit11@bandit.labs.overthewire.org -p 2220
+
+Step9: The Bandit Level 10 → Level 11 challenge is solved.
+
+Step10: Congratulations!! you have solved this problem!!
