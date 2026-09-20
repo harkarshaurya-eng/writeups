@@ -1,0 +1,31 @@
+// Bandit Level 7 → Level 8
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 7 server using SSH:
+
+        ssh bandit7@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 6.
+
+Step3: List the files in the current directory:
+
+        ls
+
+Step4: A file named `data.txt` is present.
+
+Step5: We need to find the line containing the word `millionth`.
+
+Step6: Use the `grep` command to search for `millionth`:
+
+        grep "millionth" data.txt
+
+Step7: The output contains the password required to log in to the next level, `bandit8`.
+
+Step8: Use the obtained password to connect to the next level:
+
+        ssh bandit8@bandit.labs.overthewire.org -p 2220
+
+Step9: The Bandit Level 7 → Level 8 challenge is solved.
+
+Step10: Congratulations!! you have solved this problem!!
