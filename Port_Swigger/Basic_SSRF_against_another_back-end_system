@@ -1,0 +1,41 @@
+// Basic SSRF against another back-end system
+
+URL: https://0a74001603bcda1180332bec00e600a9.web-security-academy.net/
+
+Step1: Open the PortSwigger lab and visit any product page.
+
+Step2: Click the `Check stock` button and intercept the request using Burp Suite.
+
+Step3: Send the request to Burp Intruder.
+
+Step4: Change the `stockApi` parameter to:
+
+        http://192.168.0.1:8080/admin
+
+Highlight the final octet of the IP address (`1`) and click `Add §`.
+
+Step5: In the `Payloads` side panel, select `Numbers` as the payload type and enter:
+
+        From: 1
+        To: 255
+        Step: 1
+
+Step6: Click `Start attack` to scan the internal `192.168.0.0/24` network.
+
+Step7: Click on the `Status` column to sort the results by status code in ascending order.
+
+Step8: Look for the request returning a `200` status code. This response contains the internal admin interface.
+
+Step9: Select the successful request and send it to Burp Repeater.
+
+Step10: Change the path in the `stockApi` parameter to:
+
+        /admin/delete?username=carlos
+
+Step11: Send the request.
+
+Step12: The request is processed by the internal admin interface and the user `carlos` is deleted.
+
+Step13: The lab is solved.
+
+Step14: Congratulations!! You have solved this problem!!
