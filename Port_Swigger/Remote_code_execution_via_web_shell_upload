@@ -1,0 +1,19 @@
+# Challenge Name
+
+## Description
+Short explanation of what the challenge is about.
+
+## Step 1: Explore the Application
+What we observe when opening/interacting with the target.
+
+## Step 2: Identify the Vulnerability
+What behavior looks suspicious and how we confirm it.
+
+## Step 3: Exploit
+Exact requests/commands/actions used to exploit it.
+
+## Step 4: Get the Flag
+Show the final successful result.
+
+## Conclusion
+Congratulations!! you have solved this problem!!
