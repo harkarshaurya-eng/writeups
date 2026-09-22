@@ -1,0 +1,113 @@
+//Leviathan 5 solve 
+
+
+leviathan5@leviathan:~$ ls
+leviathan5
+leviathan5@leviathan:~$ file leviathan5 
+leviathan5: setuid ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=78e1dc27ee31ed8e9b0ec58101923995bf164b97, for GNU/Linux 3.2.0, not stripped
+leviathan5@leviathan:~$ strings
+^C
+leviathan5@leviathan:~$ strings leviathan5 
+td4 
+/lib/ld-linux.so.2
+_IO_stdin_used
+fgetc
+puts
+exit
+setuid
+putchar
+unlink
+fopen
+feof
+__libc_start_main
+fclose
+getuid
+libc.so.6
+GLIBC_2.0
+GLIBC_2.1
+GLIBC_2.34
+__gmon_start__
+/tmp/file.log
+Cannot find /tmp/file.log
+;*2$"(
+GCC: (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+crt1.o
+__wrap_main
+__abi_tag
+crtstuff.c
+deregister_tm_clones
+__do_global_dtors_aux
+completed.0
+__do_global_dtors_aux_fini_array_entry
+frame_dummy
+__frame_dummy_init_array_entry
+leviathan5.c
+__FRAME_END__
+_DYNAMIC
+__GNU_EH_FRAME_HDR
+_GLOBAL_OFFSET_TABLE_
+__libc_start_main@GLIBC_2.34
+__x86.get_pc_thunk.bx
+_edata
+fclose@GLIBC_2.1
+_fini
+getuid@GLIBC_2.0
+unlink@GLIBC_2.0
+__data_start
+puts@GLIBC_2.0
+__gmon_start__
+exit@GLIBC_2.0
+__dso_handle
+_IO_stdin_used
+feof@GLIBC_2.0
+fopen@GLIBC_2.1
+putchar@GLIBC_2.0
+_end
+_dl_relocate_static_pie
+_fp_hw
+fgetc@GLIBC_2.0
+__bss_start
+setuid@GLIBC_2.0
+__TMC_END__
+_init
+.symtab
+.strtab
+.shstrtab
+.note.gnu.build-id
+.interp
+.gnu.hash
+.dynsym
+.dynstr
+.gnu.version
+.gnu.version_r
+.rel.dyn
+.rel.plt
+.init
+.text
+.fini
+.rodata
+.eh_frame_hdr
+.eh_frame
+.note.ABI-tag
+.init_array
+.fini_array
+.dynamic
+.got
+.got.plt
+.data
+.bss
+.comment
+leviathan5@leviathan:~$ ltrace ./leviathan5 
+__libc_start_main(["./leviathan5"] <unfinished ...>
+fopen("/tmp/file.log", "r")                              = nil
+puts("Cannot find /tmp/file.log"Cannot find /tmp/file.log
+)                        = 26
+exit(-1 <no return ...>
++++ exited (status 255) +++
+leviathan5@leviathan:~$ echo "GB" > /tmp/file.log
+leviathan5@leviathan:~$ ./leviathan5             
+GB
+leviathan5@leviathan:~$ ln -s /etc/leviathan_pass/leviathan6 /tmp/file.log
+leviathan5@leviathan:~$ ./leviathan5 
+JRGj9iWNOb
+leviathan5@leviathan:~$ 
