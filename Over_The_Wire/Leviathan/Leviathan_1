@@ -1,0 +1,215 @@
+//Leviathan 2
+
+
+leviathan1@leviathan:~$ ls
+check
+leviathan1@leviathan:~$ file check 
+check: setuid ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=f6b58bfe47f164d0908615cb96f39ed36ce1431d, for GNU/Linux 3.2.0, not stripped
+leviathan1@leviathan:~$ ./check 
+password: sorryG
+Wrong password, Good Bye ...
+leviathan1@leviathan:~$ strings check 
+td8 
+/lib/ld-linux.so.2
+_IO_stdin_used
+puts
+__stack_chk_fail
+system
+getchar
+__libc_start_main
+printf
+setreuid
+strcmp
+geteuid
+libc.so.6
+GLIBC_2.4
+GLIBC_2.34
+GLIBC_2.0
+__gmon_start__
+secr
+love
+password: 
+/bin/sh
+Wrong password, Good Bye ...
+;*2$"0
+GCC: (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+crt1.o
+__wrap_main
+__abi_tag
+crtstuff.c
+deregister_tm_clones
+__do_global_dtors_aux
+completed.0
+__do_global_dtors_aux_fini_array_entry
+frame_dummy
+__frame_dummy_init_array_entry
+check.c
+__FRAME_END__
+_DYNAMIC
+__GNU_EH_FRAME_HDR
+_GLOBAL_OFFSET_TABLE_
+strcmp@GLIBC_2.0
+__libc_start_main@GLIBC_2.34
+__x86.get_pc_thunk.bx
+printf@GLIBC_2.0
+getchar@GLIBC_2.0
+_edata
+_fini
+__stack_chk_fail@GLIBC_2.4
+geteuid@GLIBC_2.0
+__data_start
+puts@GLIBC_2.0
+system@GLIBC_2.0
+__gmon_start__
+__dso_handle
+_IO_stdin_used
+setreuid@GLIBC_2.0
+_end
+_dl_relocate_static_pie
+_fp_hw
+__bss_start
+__TMC_END__
+_init
+.symtab
+.strtab
+.shstrtab
+.note.gnu.build-id
+.interp
+.gnu.hash
+.dynsym
+.dynstr
+.gnu.version
+.gnu.version_r
+.rel.dyn
+.rel.plt
+.init
+.text
+.fini
+.rodata
+.eh_frame_hdr
+.eh_frame
+.note.ABI-tag
+.init_array
+.fini_array
+.dynamic
+.got
+.got.plt
+.data
+.bss
+.comment
+leviathan1@leviathan:~$ ltrace check    
+Can't execute `check': Permission denied
+failed to initialize process 87: No such file or directory
+couldn't open program 'check': No such file or directory
+leviathan1@leviathan:~$ ltrace ./check
+__libc_start_main(["./check"] <unfinished ...>
+printf("password: ")                                     = 10
+getchar(0xf7fc5310, 0xf7fc3000, 0x786573, 0x646f67password: G
+)      = 71
+getchar(0xf7fc5310, 0xf7fc3047, 0x786573, 0x646f67)      = 10
+getchar(0xf7fc5310, 0xf7fc0a47, 0x786573, 0x646f67
+)      = 10
+strcmp("G\n\n", "sex")                                   = -1
+puts("Wrong password, Good Bye ..."Wrong password, Good Bye ...
+)                     = 29
++++ exited (status 0) +++
+leviathan1@leviathan:~$ ./check       
+password: sex
+$ whoami
+leviathan2
+$ cat /etc
+cat: /etc: Is a directory
+$ cd /etc
+$ ls
+ModemManager		      issue.behemoth.localhost	  pam.d
+PackageKit		      issue.drifter		  passwd
+X11			      issue.drifter.fail	  passwd-
+acpi			      issue.drifter.localhost	  perl
+adduser.conf		      issue.formulaone		  pki
+alternatives		      issue.formulaone.fail	  plymouth
+apparmor		      issue.formulaone.localhost  pm
+apparmor.d		      issue.krypton		  polkit-1
+apport			      issue.krypton.fail	  pollinate
+apt			      issue.krypton.localhost	  ppp
+bandit_pass		      issue.leviathan		  profile
+bash.bashrc		      issue.leviathan.fail	  profile.d
+bash_completion		      issue.leviathan.localhost   protocols
+bash_completion.d	      issue.manpage		  python3
+behemoth_pass		      issue.manpage.fail	  python3.14
+bindresvport.blacklist	      issue.manpage.localhost	  rc0.d
+binfmt.d		      issue.maze		  rc1.d
+ca-certificates		      issue.maze.fail		  rc2.d
+ca-certificates.conf	      issue.maze.localhost	  rc3.d
+ca-certificates.conf.dpkg-old  issue.narnia		  rc4.d
+chrony			      issue.narnia.fail	  rc5.d
+cloud			      issue.narnia.localhost	  rc6.d
+console-setup		      issue.net		  rcS.d
+credstore		      issue.utumno		  resolv.conf
+credstore.encrypted	      issue.utumno.fail	  rmt
+cron.d			      issue.utumno.localhost	  rpc
+cron.daily		      issue.vortex		  rsyslog.conf
+cron.hourly		      issue.vortex.fail	  rsyslog.d
+cron.monthly		      issue.vortex.localhost	  screenrc
+cron.weekly		      kernel			  security
+cron.yearly		      krypton_pass		  selinux
+crontab			      landscape		  sensors.d
+crypttab		      ld.so.cache		  sensors3.conf
+dbus-1			      ld.so.conf		  services
+debconf.conf		      ld.so.conf.d		  sgml
+debian_version		      ldap			  shadow
+debuginfod		      legal			  shadow-
+default			      leviathan_pass		  shells
+deluser.conf		      libaudit.conf		  skel
+depmod.d		      libblockdev		  sos
+dhcp			      libibverbs.d		  ssh
+dhcpcd.conf		      libnl-3			  ssl
+dpkg			      locale.conf		  stunnel
+dracut.conf		      locale.gen		  subgid
+dracut.conf.d		      localtime		  subgid-
+drifter_pass		      logcheck			  subuid
+e2scrub.conf		      login.defs		  subuid-
+ec2_version		      logrotate.conf		  sudo.conf
+emacs			      logrotate.d		  sudo_logsrvd.conf
+environment		      lsb-release		  sudoers
+ethertypes		      ltrace.conf		  sudoers.d
+formulaone_pass		      lvm			  supercat
+fstab			      machine-id		  supervisor
+fuse.conf		      magic			  sysctl.conf
+fwupd			      magic.mime		  sysctl.d
+gai.conf		      manpage_pass		  sysstat
+gdb			      manpath.config		  systemd
+gitconfig		      maze_pass		  terminfo
+gnutls			      mdadm			  tmpfiles.d
+gprofng.rc		      mime.types		  tpm2-tss
+groff			      mke2fs.conf		  ubuntu-advantage
+group			      modprobe.d		  ucf.conf
+group-			      modules			  udev
+grub.d			      modules-load.d		  udisks2
+gshadow			      motd			  ufw
+gshadow-		      mtab			  update-manager
+gss			      multipath		  update-motd.d
+hdparm.conf		      multipath.conf		  update-notifier
+hibinit-config.cfg	      nanorc			  usb_modeswitch.conf
+host.conf		      narnia_pass		  usb_modeswitch.d
+hostname		      needrestart		  utumno_pass
+hosts			      netconfig		  vconsole.conf
+hosts.allow		      netplan			  vim
+hosts.deny		      network			  vmware-tools
+init.d			      networkd-dispatcher	  vortex_pass
+initramfs-tools		      networks			  vtrgb
+inputrc			      newt			  watchdog.conf
+iscsi			      nftables.conf		  wgetrc
+issue			      nsswitch.conf		  xattr.conf
+issue.bandit		      opt			  xdg
+issue.bandit.fail	      os-release		  xinetd.conf
+issue.bandit.localhost	      overlayroot.conf		  xinetd.d
+issue.behemoth		      overlayroot.local.conf	  xml
+issue.behemoth.fail	      pam.conf			  zsh_command_not_found
+$ cd leviathan_pass     
+$ ls
+leviathan0  leviathan1	leviathan2  leviathan3	leviathan4  leviathan5	leviathan6  leviathan7
+$ file leviathan2
+leviathan2: ASCII text
+$ cat leviathan2
+ERJ9jTYWXE
+$ 
