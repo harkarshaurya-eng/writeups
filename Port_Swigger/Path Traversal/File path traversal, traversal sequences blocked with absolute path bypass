@@ -1,0 +1,45 @@
+# Lab: File Path Traversal, Traversal Sequences Blocked with Absolute Path Bypass
+
+## Objective
+
+The goal is to exploit the path traversal vulnerability and retrieve the contents of `/etc/passwd`.
+
+## Solution
+
+1. Open the lab and click on any product image.
+
+2. Open **Burp Suite > Proxy > HTTP history** and find the request that loads the image.
+
+3. Send the request to **Repeater**.
+
+4. Find the `filename` parameter. It will look something like:
+
+    filename=../../image.jpg
+
+5. Since traversal sequences are blocked, bypass the filter by directly providing the absolute path:
+
+    filename=/etc/passwd
+
+6. Send the request.
+
+7. The response contains the contents of:
+
+    /etc/passwd
+
+## Vulnerability Explanation
+
+The application blocks traversal sequences such as `../`, but it still accepts an **absolute file path**.
+
+By supplying:
+
+    /etc/passwd
+
+we can directly access a file outside the intended image directory.
+
+## Conclusion
+
+The path traversal vulnerability was successfully exploited using the absolute path:
+
+    /etc/passwd
+
+Congratulations!! you have solved this problem!!
