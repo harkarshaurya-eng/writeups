@@ -1,0 +1,85 @@
+//OS command Injection
+
+# OS Command Injection, Simple Case
+
+## Objective
+
+The application has an OS command injection vulnerability in the product stock checker.
+
+The goal is to inject the `whoami` command and find the username of the user running the application.
+
+## Solution
+
+### Step 1 — Open the Lab
+
+Open the lab:
+
+https://0a0200670310b16681832b060042004a.web-security-academy.net/product?productId=5
+
+Open the product page and click **Check stock**.
+
+### Step 2 — Capture the Request
+
+Open Burp Suite and go to:
+
+`Proxy > HTTP history`
+
+Find the stock checker request. It should contain parameters similar to:
+
+    productId=5&storeId=1
+
+Send the request to **Burp Repeater**.
+
+### Step 3 — Test the `storeId` Parameter
+
+The `storeId` parameter is used by the application when executing an operating-system command.
+
+The original value is:
+
+    storeId=1
+
+Change it to:
+
+    storeId=1|whoami
+
+The `|` character is a shell operator that allows another command to be executed.
+
+### Step 4 — Send the Payload
+
+Send the modified request:
+
+    productId=5&storeId=1|whoami
+
+The server processes the injected command:
+
+    whoami
+
+### Step 5 — Read the Response
+
+Check the response in Burp Repeater.
+
+The response contains the username returned by the `whoami` command.
+
+This confirms that our command was successfully executed on the server.
+
+### Step 6 — Understand the Vulnerability
+
+The application directly places the user-controlled `storeId` value into an operating-system command.
+
+Original:
+
+    storeId=1
+
+Modified:
+
+    storeId=1|whoami
+
+The shell interprets `|` as an operator and executes `whoami`.
+
+Therefore, the `storeId` parameter is vulnerable to **OS command injection**.
+
+## Conclusion
+
+The `whoami` command was successfully executed through the vulnerable `storeId` parameter, revealing the current operating-system user.
+
+Congratulations!! you have solved this problem!!
