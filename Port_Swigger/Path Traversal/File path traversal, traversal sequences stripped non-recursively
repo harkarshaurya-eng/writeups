@@ -1,0 +1,55 @@
+# Lab: File Path Traversal, Traversal Sequences Stripped Non-Recursively
+
+## Objective
+
+The goal is to exploit the path traversal vulnerability and retrieve the contents of `/etc/passwd`.
+
+## Solution
+
+1. Open the lab and click on any product image.
+
+2. Open **Burp Suite > Proxy > HTTP history** and find the request that loads the image.
+
+3. Send the request to **Repeater**.
+
+4. Find the `filename` parameter.
+
+5. The application strips `../` from the input, but it does this **only once**.
+
+6. Replace the filename with:
+
+    ....//....//....//etc/passwd
+
+7. Send the request.
+
+8. The application removes the `../` sequences from the payload, leaving:
+
+    ../../../etc/passwd
+
+9. The resulting path traversal allows access to:
+
+    /etc/passwd
+
+10. The response contains the contents of the `/etc/passwd` file.
+
+## Vulnerability Explanation
+
+The application attempts to prevent path traversal by removing `../` sequences.
+
+However, the filtering is **non-recursive**. By using:
+
+    ....//
+
+the filter removes the inner `../`, leaving another valid `../` sequence.
+
+This allows us to bypass the filter and perform path traversal.
+
+## Conclusion
+
+The path traversal vulnerability was successfully exploited using:
+
+    ....//....//....//etc/passwd
+
+This bypassed the non-recursive filtering and allowed us to read `/etc/passwd`.
+
+Congratulations!! you have solved this problem!!
