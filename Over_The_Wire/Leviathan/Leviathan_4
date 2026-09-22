@@ -1,0 +1,24 @@
+//solving Leviathan 4
+
+
+leviathan4@leviathan:~$ ls
+leviathan4@leviathan:~$ pwd
+/home/leviathan4
+leviathan4@leviathan:~$ ls -la
+total 24
+drwxr-xr-x   3 root root       4096 Jun 24 15:00 .
+drwxr-xr-x 150 root root       4096 Jun 24 15:02 ..
+-rw-r--r--   1 root root        220 Feb 13  2026 .bash_logout
+-rw-r--r--   1 root root       3851 Jun 24 14:50 .bashrc
+-rw-r--r--   1 root root        807 Feb 13  2026 .profile
+dr-xr-x---   2 root leviathan4 4096 Jun 24 15:00 .trash
+leviathan4@leviathan:~$ file .trash/
+.trash/: directory
+leviathan4@leviathan:~$ cd .trash/
+leviathan4@leviathan:~/.trash$ ls
+bin
+leviathan4@leviathan:~/.trash$ file bin
+bin: setuid ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=12f7352f9149ab6f2b4f5fb16967bdfa029c1e70, for GNU/Linux 3.2.0, not stripped
+leviathan4@leviathan:~/.trash$ ./bin
+01000010 01110101 01100010 00111001 01100111 01011010 00110011 01000010 01000111 01010101 00001010 
+leviathan4@leviathan:~/.trash$ ANSWER:SOLVED USING MY CRYPTOSWISS.PY tool: Bub9gZ3BGU
