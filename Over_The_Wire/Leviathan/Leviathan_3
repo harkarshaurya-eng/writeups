@@ -1,0 +1,55 @@
+//solving leviathan 3
+
+leviathan3@leviathan:~$ ls
+level3
+leviathan3@leviathan:~$ file level3
+level3: setuid ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=02a625a3844275982ffb6d756e97e553154f9968, for GNU/Linux 3.2.0, with debug_info, not stripped
+leviathan3@leviathan:~$ ./level3
+Enter the password> GB
+bzzzzzzzzap. WRONG
+leviathan3@leviathan:~$ ltrace ./level3 
+__libc_start_main(["./level3"] <unfinished ...>
+strcmp("h0no33", "kakaka")                               = -1
+printf("Enter the password> ")                           = 20
+fgets(Enter the password> GB
+"GB\n", 256, 0xf7fa85a0)                           = 0xffffd26c
+strcmp("GB\n", "snlprintf\n")                            = -1
+puts("bzzzzzzzzap. WRONG"bzzzzzzzzap. WRONG
+)                               = 19
++++ exited (status 0) +++
+leviathan3@leviathan:~$ ./level3        
+Enter the password> snlprintf
+[You've got shell]!
+$ whoami
+leviathan4
+$ ls
+level3
+$ file
+Usage: file [-bcCdEhikLlNnprsSvzZ0] [--apple] [--extension] [--mime-encoding]
+            [--mime-type] [-e <testname>] [-F <separator>]  [-f <namefile>]
+            [-m <magicfiles>] [-P <parameter=value>] [--exclude-quiet]
+            <file> ...
+       file -C [-m <magicfiles>]
+       file [--help]
+$ file level3
+level3: setuid ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=02a625a3844275982ffb6d756e97e553154f9968, for GNU/Linux 3.2.0, with debug_info, not stripped
+$ ls -l level3  
+-r-sr-x--- 1 leviathan4 leviathan3 18164 Jun 24 15:00 level3
+$ ltrace ./level3
+__libc_start_main(["./level3"] <unfinished ...>
+strcmp("h0no33", "kakaka")                               = -1
+printf("Enter the password> ")                           = 20
+fgets(Enter the password> GB
+"GB\n", 256, 0xf7fa85a0)                           = 0xffffd27c
+strcmp("GB\n", "snlprintf\n")                            = -1
+puts("bzzzzzzzzap. WRONG"bzzzzzzzzap. WRONG
+)                               = 19
++++ exited (status 0) +++
+$ ./level3
+Enter the password> snlprintf
+[You've got shell]!
+$ whoami
+leviathan4
+$ cat /etc/leviathan_pass/leviathan4
+XIyBbRwAPt
+$ 
