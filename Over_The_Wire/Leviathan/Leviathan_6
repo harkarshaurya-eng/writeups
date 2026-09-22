@@ -1,0 +1,217 @@
+//leviathan 6 solved 
+
+
+leviathan6@leviathan:~$ ls
+leviathan6
+leviathan6@leviathan:~$ clear
+'xterm-kitty': unknown terminal type.
+leviathan6@leviathan:~$ ls
+leviathan6
+leviathan6@leviathan:~$ file leviathan6 
+leviathan6: setuid ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=87831bb8819038ce4be38a7d795f289582f78756, for GNU/Linux 3.2.0, not stripped
+leviathan6@leviathan:~$ strings leviathan6 
+td0 
+}y_(
+V/lib/ld-linux.so.2
+_IO_stdin_used
+puts
+exit
+system
+atoi
+__libc_start_main
+printf
+setreuid
+geteuid
+libc.so.6
+GLIBC_2.0
+GLIBC_2.34
+__gmon_start__
+usage: %s <4 digit code>
+/bin/sh
+Wrong
+;*2$"0
+GCC: (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+crt1.o
+__wrap_main
+__abi_tag
+crtstuff.c
+deregister_tm_clones
+__do_global_dtors_aux
+completed.0
+__do_global_dtors_aux_fini_array_entry
+frame_dummy
+__frame_dummy_init_array_entry
+leviathan6.c
+__FRAME_END__
+_DYNAMIC
+__GNU_EH_FRAME_HDR
+_GLOBAL_OFFSET_TABLE_
+__libc_start_main@GLIBC_2.34
+__x86.get_pc_thunk.bx
+printf@GLIBC_2.0
+_edata
+_fini
+geteuid@GLIBC_2.0
+__data_start
+puts@GLIBC_2.0
+system@GLIBC_2.0
+__gmon_start__
+exit@GLIBC_2.0
+__dso_handle
+_IO_stdin_used
+setreuid@GLIBC_2.0
+_end
+_dl_relocate_static_pie
+_fp_hw
+__bss_start
+atoi@GLIBC_2.0
+__TMC_END__
+_init
+.symtab
+.strtab
+.shstrtab
+.note.gnu.build-id
+.interp
+.gnu.hash
+.dynsym
+.dynstr
+.gnu.version
+.gnu.version_r
+.rel.dyn
+.rel.plt
+.init
+.text
+.fini
+.rodata
+.eh_frame_hdr
+.eh_frame
+.note.ABI-tag
+.init_array
+.fini_array
+.dynamic
+.got
+.got.plt
+.data
+.bss
+.comment
+leviathan6@leviathan:~$ echo interesting finding usage: %s <4 digit code> and atoi function
+-bash: 4: No such file or directory
+leviathan6@leviathan:~$ echo "s <4 digit code> and atoi function"it code> and atoi function"  interesting finding usage: %s <4 digit code> and atoi function
+leviathan6@leviathan:~$ ltrace ./leviathan6 
+__libc_start_main(["./leviathan6"] <unfinished ...>
+printf("usage: %s <4 digit code>\n", "./leviathan6"usage: ./leviathan6 <4 digit code>
+)     = 35
+exit(-1 <no return ...>
++++ exited (status 255) +++
+leviathan6@leviathan:~$ ltrace ./leviathan6 0000
+__libc_start_main(["./leviathan6", "0000"] <unfinished ...>
+atoi(0xffffd609, 0xf7fc3000, 0, 0)                       = 0
+puts("Wrong"Wrong
+)                                            = 6
++++ exited (status 0) +++
+leviathan6@leviathan:~$ ltrace ./leviathan6 1234
+__libc_start_main(["./leviathan6", "1234"] <unfinished ...>
+atoi(0xffffd609, 0xf7fc3000, 0, 0)                       = 1234
+puts("Wrong"Wrong
+)                                            = 6
++++ exited (status 0) +++
+leviathan6@leviathan:~$ ltrace ./leviathan6 12  
+__libc_start_main(["./leviathan6", "12"] <unfinished ...>
+atoi(0xffffd60b, 0xf7fc3000, 0, 0)                       = 12
+puts("Wrong"Wrong
+)                                            = 6
++++ exited (status 0) +++
+leviathan6@leviathan:~$ echo "use gdb to disassemble" 
+use gdb to disassemble
+leviathan6@leviathan:~$ gdb ./leviathan6 
+GNU gdb (Ubuntu 17.1-2ubuntu1) 17.1
+Copyright (C) 2025 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./leviathan6...
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) y
+Debuginfod has been enabled.
+To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
+Download failed: Cannot allocate memory.  Continuing without separate debug info for /home/leviathan6/leviathan6.
+(No debugging symbols found in ./leviathan6)
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x080491c6 <+0>:	lea    0x4(%esp),%ecx
+   0x080491ca <+4>:	and    $0xfffffff0,%esp
+   0x080491cd <+7>:	push   -0x4(%ecx)
+   0x080491d0 <+10>:	push   %ebp
+   0x080491d1 <+11>:	mov    %esp,%ebp
+   0x080491d3 <+13>:	push   %ebx
+   0x080491d4 <+14>:	push   %ecx
+   0x080491d5 <+15>:	sub    $0x10,%esp
+   0x080491d8 <+18>:	mov    %ecx,%eax
+   0x080491da <+20>:	movl   $0x1bd3,-0xc(%ebp)
+   0x080491e1 <+27>:	cmpl   $0x2,(%eax)
+   0x080491e4 <+30>:	je     0x8049206 <main+64>
+   0x080491e6 <+32>:	mov    0x4(%eax),%eax
+   0x080491e9 <+35>:	mov    (%eax),%eax
+   0x080491eb <+37>:	sub    $0x8,%esp
+   0x080491ee <+40>:	push   %eax
+   0x080491ef <+41>:	push   $0x804a008
+   0x080491f4 <+46>:	call   0x8049040 <printf@plt>
+   0x080491f9 <+51>:	add    $0x10,%esp
+   0x080491fc <+54>:	sub    $0xc,%esp
+   0x080491ff <+57>:	push   $0xffffffff
+   0x08049201 <+59>:	call   0x8049080 <exit@plt>
+   0x08049206 <+64>:	mov    0x4(%eax),%eax
+   0x08049209 <+67>:	add    $0x4,%eax
+   0x0804920c <+70>:	mov    (%eax),%eax
+   0x0804920e <+72>:	sub    $0xc,%esp
+   0x08049211 <+75>:	push   %eax
+   0x08049212 <+76>:	call   0x80490a0 <atoi@plt>
+   0x08049217 <+81>:	add    $0x10,%esp
+   0x0804921a <+84>:	cmp    %eax,-0xc(%ebp)
+   0x0804921d <+87>:	jne    0x804924a <main+132>
+   0x0804921f <+89>:	call   0x8049050 <geteuid@plt>
+   0x08049224 <+94>:	mov    %eax,%ebx
+   0x08049226 <+96>:	call   0x8049050 <geteuid@plt>
+   0x0804922b <+101>:	sub    $0x8,%esp
+   0x0804922e <+104>:	push   %ebx
+   0x0804922f <+105>:	push   %eax
+   0x08049230 <+106>:	call   0x8049090 <setreuid@plt>
+   0x08049235 <+111>:	add    $0x10,%esp
+   0x08049238 <+114>:	sub    $0xc,%esp
+   0x0804923b <+117>:	push   $0x804a022
+   0x08049240 <+122>:	call   0x8049070 <system@plt>
+   0x08049245 <+127>:	add    $0x10,%esp
+   0x08049248 <+130>:	jmp    0x804925a <main+148>
+   0x0804924a <+132>:	sub    $0xc,%esp
+   0x0804924d <+135>:	push   $0x804a02a
+   0x08049252 <+140>:	call   0x8049060 <puts@plt>
+   0x08049257 <+145>:	add    $0x10,%esp
+   0x0804925a <+148>:	mov    $0x0,%eax
+   0x0804925f <+153>:	lea    -0x8(%ebp),%esp
+--Type <RET> for more, q to quit, c to continue without paging--q
+❌️ Quit
+(gdb) exit
+leviathan6@leviathan:~$ echo "interesting line here: movl   $0x1bd3,-0xc(%ebp)"
+interesting line here: movl   -bashx1bd3,-0xc(%ebp)
+leviathan6@leviathan:~$ echo "convert 1bd3 to digits"
+convert 1bd3 to digits
+leviathan6@leviathan:~$ python3 -c 'print(int("1bd3",16))'
+7123
+leviathan6@leviathan:~$ ./leviathan6 7123
+$ whoami
+leviathan7
+$ cat /etc/leviathan_pass/leviathan7
+3zrlkaPTfH
+$ 
