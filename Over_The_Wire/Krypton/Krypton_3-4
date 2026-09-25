@@ -1,0 +1,41 @@
+Krypton Level 3 → Level 4
+
+URL
+https://overthewire.org/wargames/krypton/
+
+Steps
+
+1. Check the ciphertext
+
+krypton3@krypton:~$ cat krypton4
+
+The file contains ciphertext encrypted using a monoalphabetic substitution cipher.
+
+2. Perform frequency analysis
+
+Use the provided ciphertext samples to analyse the frequency of each character.
+
+krypton3@krypton:~$ cat found1 found2 found3 | tr -cd 'A-Z' | fold -w1 | sort | uniq -c | sort -nr
+
+Use the frequency of letters, repeated words, and common English patterns to determine the substitution mapping.
+
+3. Build the substitution mapping
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+BOIHGKNJVTWMURXZAQEYSLDFPC
+
+4. Decrypt krypton4
+
+krypton3@krypton:~$ cat krypton4 | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'BOIHGKNJVTWMURXZAQEYSLDFPC'
+
+WELLD ONETH ELEVE LFOUR PASSW ORDIS BRUTE
+
+The message reads:
+
+WELL DONE THE LEVEL FOUR PASSWORD IS BRUTE
+
+5. Password
+
+BRUTE
+
+Congratulations!!
