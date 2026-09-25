@@ -1,0 +1,31 @@
+HEADER ACCEPTED.
+
+Nice.
+
+Unfortunately, the challenge is not finished.
+
+stage2.dat:
+"I am not encrypted."
+""
+"I am just misunderstood."
+
+You already spent all that time finding a 16-byte key.
+
+Now use it.
+
+Things you may want to think about:
+
+- What can you do with a single byte?
+- Can bits move without disappearing?
+- What happens when your key is smaller than your data?
+- Why is XOR so common in tiny CTF challenges?
+- Would writing 25 calculations by hand be a good use of your time?
+
+Hint:
+If your solution becomes 50 lines long, you are probably making your life harder than necessary.
+
+Write a small script.
+
+The computer is much better at doing the boring part.
+
+Good luck.
