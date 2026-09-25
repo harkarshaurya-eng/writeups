@@ -1,0 +1,27 @@
+// krypton 2-3, solve using symlink
+
+krypton2@krypton:/krypton/krypton2$ ls 
+README encrypt keyfile.dat krypton3
+krypton2@krypton:/krypton/krypton2$ mktemp -d 
+/tmp/tmp.hepF4uquSA
+krypton2@krypton:/krypton/krypton2$ pushd /tmp/tmp.hepF4uquSA
+/tmp/tmp.hepF4uquSA /krypton/krypton2
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ ln -s /krypton/krypton2/keyfile.dat 
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ ls -la
+total 0
+drwx------   2 krypton2 krypton2   60 Sep 25 20:48 .
+drwxrwx-wt 110 root     root     2720 Sep 25 20:48 ..
+lrwxrwxrwx   1 krypton2 krypton2   29 Sep 25 20:48 keyfile.dat -> /krypton/krypton2/keyfile.dat
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ echo "AAAAA" > example.txt
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ chmod 777 .
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ /krypton/krypton2/encrypt example.txt 
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ la
+ciphertext  example.txt  keyfile.dat
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ cat ciphertext 
+krypton2@krypton:/tmp/tmp.hepF4uquSA$                     nt()'
+krypton2@krypton:/tmp/tmp.hepF4uquSA$ popd
+/krypton/krypton2
+krypton2@krypton:/krypton/krypton2$ echo "key is 12"
+key is 12
+krypton2@krypton:/krypton/krypton2$ echo "password == CAESARISEASY"
+password == CAESARISEASY
