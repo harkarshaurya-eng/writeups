@@ -1,0 +1,7 @@
+//convert Base64 to text
+
+╭─{shaurya@blackarch Desktop/ctfS/overTheWire} 
+╰─🔥 ❯ echo "S1JZUFRPTklTR1JFQVQ=" | base64 -d
+KRYPTONISGREAT
+
+use this as password to ssh to next level 
