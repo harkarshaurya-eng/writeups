@@ -1,0 +1,72 @@
+// using gdb, very simple 
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ ls
+ debugger0_a                disassembler-dump0_d.txt   disk.flag.img.gz
+ disassembler-dump0_c.txt  'disk (1).img'
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ file debugger0_a 
+debugger0_a: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=c493499e7d12705006009934ee0a6225376448bf, for GNU/Linux 3.2.0, not stripped
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ gdb ./debugger0_a 
+GNU gdb (GDB) 17.2
+Copyright (C) 2025 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-pc-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./debugger0_a...
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.archlinux.org>
+Enable debuginfod for this session? (y or [n]) y
+Debuginfod has been enabled.
+To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
+(No debugging symbols found in ./debugger0_a)
+(gdb) dissemble main
+❌️ Undefined command: "dissemble".  Try "help".
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000000000001129 <+0>:	endbr64
+   0x000000000000112d <+4>:	push   %rbp
+   0x000000000000112e <+5>:	mov    %rsp,%rbp
+   0x0000000000001131 <+8>:	mov    %edi,-0x4(%rbp)
+   0x0000000000001134 <+11>:	mov    %rsi,-0x10(%rbp)
+   0x0000000000001138 <+15>:	mov    $0x86342,%eax
+   0x000000000000113d <+20>:	pop    %rbp
+   0x000000000000113e <+21>:	ret
+End of assembler dump.
+(gdb) set disassembly-flavor intel 
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000000000001129 <+0>:	endbr64
+   0x000000000000112d <+4>:	push   rbp
+   0x000000000000112e <+5>:	mov    rbp,rsp
+   0x0000000000001131 <+8>:	mov    DWORD PTR [rbp-0x4],edi
+   0x0000000000001134 <+11>:	mov    QWORD PTR [rbp-0x10],rsi
+   0x0000000000001138 <+15>:	mov    eax,0x86342
+   0x000000000000113d <+20>:	pop    rbp
+   0x000000000000113e <+21>:	ret
+End of assembler dump.
+(gdb) exit
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x86342))
+549698
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "the value in eax is 549698"
+the value in eax is 549698
+
+FLAG: academy{549698}
