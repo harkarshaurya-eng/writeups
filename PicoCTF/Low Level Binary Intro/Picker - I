@@ -1,0 +1,22 @@
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ file picker-I.py 
+picker-I.py: C source, ASCII text
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ less picker-I.py 
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ nc xebec.cylabacademy.net 23596
+Try entering "getRandomNumber" without the double quotes...
+==> win
+0x61 0x63 0x61 0x64 0x65 0x6d 0x79 0x7b 0x34 0x5f 0x64 0x31 0x34 0x6d 0x30 0x6e 0x64 0x5f 0x31 0x6e 0x5f 0x37 0x68 0x33 0x5f 0x72 0x30 0x75 0x67 0x68 0x5f 0x31 0x39 0x33 0x64 0x33 0x36 0x32 0x64 0x7d 
+Try entering "getRandomNumber" without the double quotes...
+==> ^C
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ echo "convert these hexadecimal values to ASCII characters to get the flag!!"
+echo "convert these hexadecimal values to ASCII characters to get the flagnc xebec.cylabacademy.net 23596"
+convert these hexadecimal values to ASCII characters to get the flagnc xebec.cylabacademy.net 23596
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ 
