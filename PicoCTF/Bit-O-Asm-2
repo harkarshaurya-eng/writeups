@@ -1,0 +1,50 @@
+//Understanding PTR{Pointers in Assembly and addressing}
+
+The Code to analyse:
+
+<+0>:     endbr64 
+<+4>:     push   rbp
+<+5>:     mov    rbp,rsp
+<+8>:     mov    DWORD PTR [rbp-0x14],edi
+<+11>:    mov    QWORD PTR [rbp-0x20],rsi
+<+15>:    mov    DWORD PTR [rbp-0x4],0x9fe1a
+<+22>:    mov    eax,DWORD PTR [rbp-0x4]
+<+25>:    pop    rbp
+<+26>:    ret
+
+
+What does this code do:
+1)endbr64 - some security thing in intel syntax of assembly, ignore for this challenge
+2)push rbp - push rbp value in rbp into the stack 
+3) mov rbp, rsp - copy value of stack pointer RSP into rbp BASE POINTER
+4)mov DWORD PTR [rbp-0x14],edi - move the value of edi into DWORD(4bytes) PTR pointing t [rbp-0x14] -> 14 bits before rbp
+5)mov QWORD PTR [rbp-0x20],rsi - similar to DWORD
+6)mov DWORD PTR [rbp-0x4],0x9fe1a -similar to above 
+7)eax,DWORD PTR [rbp-0x4] - the value stored in eax is stored in DWORD PTR [rbp-0x4] and this pointer contains value -->{0x9fe1a}
+
+So The Answer Is: 0x9fe1a, convert it to text using command
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ printf "%d\n" $((0x9fe1a))
+654874
+
+COMPLETE WALKTHROUGH:
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ cat disassembler-dump0_b.txt 
+<+0>:     endbr64 
+<+4>:     push   rbp
+<+5>:     mov    rbp,rsp
+<+8>:     mov    DWORD PTR [rbp-0x14],edi
+<+11>:    mov    QWORD PTR [rbp-0x20],rsi
+<+15>:    mov    DWORD PTR [rbp-0x4],0x9fe1a
+<+22>:    mov    eax,DWORD PTR [rbp-0x4]
+<+25>:    pop    rbp
+<+26>:    ret
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ printf "%d\n" $((0x9fe1a))
+654874
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ Flag = academy{654874}
