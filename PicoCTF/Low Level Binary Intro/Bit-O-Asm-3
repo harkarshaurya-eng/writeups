@@ -1,0 +1,66 @@
+// tracking the value in eax register with simple math solve in the terminal itself using python 
+
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ cat disassembler-dump0_c.txt 
+<+0>:     endbr64 
+<+4>:     push   rbp
+<+5>:     mov    rbp,rsp
+<+8>:     mov    DWORD PTR [rbp-0x14],edi
+<+11>:    mov    QWORD PTR [rbp-0x20],rsi
+<+15>:    mov    DWORD PTR [rbp-0xc],0x9fe1a
+<+22>:    mov    DWORD PTR [rbp-0x8],0x4
+<+29>:    mov    eax,DWORD PTR [rbp-0xc]
+<+32>:    imul   eax,DWORD PTR [rbp-0x8]
+<+36>:    add    eax,0x1f5
+<+41>:    mov    DWORD PTR [rbp-0x4],eax
+<+44>:    mov    eax,DWORD PTR [rbp-0x4]
+<+47>:    pop    rbp
+<+48>:    ret
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $(0x9fe1a())
+bash: syntax error near unexpected token `)'
+bash: syntax error
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x9fe1a))
+654874
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "noe eax == 654874"
+noe eax == 654874
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x4))
+4
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ python -c 'print(654874*4)'
+2619496
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "eax == 2619496"
+eax == 2619496
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $(()0x1f5)
+bash: command substitution: line 1: syntax error near unexpected token `)'
+bash: command substitution: line 1: `()0x1f5'
+0
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x1f5))
+501
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ python -c 'print(2619496+501)'
+2619997
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "final value in eax == 2619997"
+final value in eax == 2619997
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "So the flag is academy{2619997}"
+So the flag is academy{2619997}
