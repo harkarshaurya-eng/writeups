@@ -1,0 +1,80 @@
+//using gdb commands: "break", "set disassembly-flavor intel", "ni", "i r eax" 
+
+
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ ls
+ debugger0_a   disassembler-dump0_c.txt  'disk (1).img'
+ debugger0_b   disassembler-dump0_d.txt   disk.flag.img.gz
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ file debugger0_b
+debugger0_b: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=8959ccd2c070ef18e2741cc31536cd906ec970dd, for GNU/Linux 3.2.0, not stripped
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ gdb ./debugger0_b
+GNU gdb (GDB) 17.2
+Copyright (C) 2025 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-pc-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./debugger0_b...
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.archlinux.org>
+Enable debuginfod for this session? (y or [n]) y
+Debuginfod has been enabled.
+To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
+(No debugging symbols found in ./debugger0_b)
+(gdb) set disassembly-flavor intel 
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000000000401106 <+0>:	endbr64
+   0x000000000040110a <+4>:	push   rbp
+   0x000000000040110b <+5>:	mov    rbp,rsp
+   0x000000000040110e <+8>:	mov    DWORD PTR [rbp-0x14],edi
+   0x0000000000401111 <+11>:	mov    QWORD PTR [rbp-0x20],rsi
+   0x0000000000401115 <+15>:	mov    DWORD PTR [rbp-0x4],0x1e0da
+   0x000000000040111c <+22>:	mov    DWORD PTR [rbp-0xc],0x25f
+   0x0000000000401123 <+29>:	mov    DWORD PTR [rbp-0x8],0x0
+   0x000000000040112a <+36>:	jmp    0x401136 <main+48>
+   0x000000000040112c <+38>:	mov    eax,DWORD PTR [rbp-0x8]
+   0x000000000040112f <+41>:	add    DWORD PTR [rbp-0x4],eax
+   0x0000000000401132 <+44>:	add    DWORD PTR [rbp-0x8],0x1
+   0x0000000000401136 <+48>:	mov    eax,DWORD PTR [rbp-0x8]
+   0x0000000000401139 <+51>:	cmp    eax,DWORD PTR [rbp-0xc]
+   0x000000000040113c <+54>:	jl     0x40112c <main+38>
+   0x000000000040113e <+56>:	mov    eax,DWORD PTR [rbp-0x4]
+   0x0000000000401141 <+59>:	pop    rbp
+   0x0000000000401142 <+60>:	ret
+End of assembler dump.
+(gdb) break *main+59
+Breakpoint 1 at 0x401141
+(gdb) run
+Starting program: /home/shaurya/Desktop/ctfS/picoCTF/debugger0_b 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/libthread_db.so.1".
+
+Breakpoint 1, 0x0000000000401141 in main ()
+(gdb) i r eax
+eax            0x4af4b             307019
+(gdb) exit
+A debugging session is active.
+
+	Inferior 1 [process 639248] will be killed.
+
+Quit anyway? (y or n) y
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "The flag is academy{307019}"
+The flag is academy{307019}
