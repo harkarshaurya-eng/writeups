@@ -1,1 +1,535 @@
-//Solve Like This 
+metadata_gate — Reverse Engineering Write-up
+
+STEP 1 — Check the files
+
+$ ls -la
+
+Important files:
+
+metadata_gate
+SHA256SUMS.txt
+stage2.dat
+
+
+STEP 2 — Check file integrity
+
+$ sha256sum -c SHA256SUMS.txt
+
+Important output:
+
+metadata_gate: FAILED
+stage2.dat: OK
+
+Note:
+metadata_gate does not match the supplied SHA256SUMS.txt.
+stage2.dat matches correctly.
+
+
+STEP 3 — Check file types
+
+$ file metadata_gate
+$ file SHA256SUMS.txt
+$ file stage2.dat
+
+Important output:
+
+metadata_gate: ELF 64-bit LSB pie executable
+SHA256SUMS.txt: ASCII text
+stage2.dat: data
+
+Important:
+ELF 64-bit  -> 64-bit Linux executable
+LSB         -> Little Endian
+x86-64      -> processor architecture
+
+
+STEP 4 — Find useful strings
+
+$ strings -a -n 4 metadata_gate
+
+Important output:
+
+metadata_gate :: header loaded (magic=%.4s)
+A 16-byte header/password can be derived from this binary's metadata.
+Header verified. Proceed to stage2.
+Use it against stage2.dat.
+Incorrect header value.
+metadata_gate: header integrity check failed
+
+Important clue:
+
+A 16-byte header/password can be derived from this binary's metadata.
+
+So we should inspect the binary instead of guessing the password.
+
+
+STEP 5 — Check ELF header
+
+$ readelf -h metadata_gate
+
+Important parts:
+
+Class:   ELF64
+Data:    little endian
+Machine: Advanced Micro Devices X86-64
+
+Important:
+The binary is x86-64 and little endian.
+
+
+STEP 6 — Check ELF sections
+
+$ readelf -SW metadata_gate
+
+Important section:
+
+.rodata
+
+.rodata = read-only data.
+
+This is interesting because it can contain strings, constants and other fixed metadata.
+
+
+STEP 7 — Run the program
+
+$ ./metadata_gate
+
+Important output:
+
+metadata_gate :: header loaded (magic=S0uL)
+A 16-byte header/password can be derived from this binary's metadata.
+Use it against stage2.dat.
+Incorrect header value.
+
+Important value:
+
+magic = S0uL
+
+
+STEP 8 — Convert magic to hex
+
+S0uL
+
+ASCII:
+
+S = 53
+0 = 30
+u = 75
+L = 4c
+
+Therefore:
+
+S0uL = 53 30 75 4c
+
+
+STEP 9 — Dump .rodata
+
+$ objdump -s -j .rodata metadata_gate
+
+Important memory address:
+
+>>> 0x2110
+
+Important bytes:
+
+>>> 0x2110:
+53 30 75 4c 02 00 33 00 34 00 00 00 6f 00 00 00
+81 00 00 00
+
+
+STEP 10 — Split the metadata
+
+At address:
+
+>>> 0x2110
+
+We have:
+
+53 30 75 4c
+02 00
+33 00
+34 00
+00 00
+6f 00 00 00
+81 00 00 00
+
+
+STEP 11 — Understand little endian
+
+The binary is little endian.
+
+So:
+
+02 00       = 0x0002
+33 00       = 0x0033
+34 00       = 0x0034
+6f 00 00 00 = 0x0000006f
+81 00 00 00 = 0x00000081
+
+
+STEP 12 — Identify the fields
+
+>>> 0x2110
+
+53 30 75 4c
+= magic = S0uL
+
+02 00
+= version = 0x0002
+
+33 00
+= width = 0x0033
+
+34 00
+= height = 0x0034
+
+00 00
+= padding
+
+6f 00 00 00
+= data_length = 0x0000006f
+
+81 00 00 00
+= checksum = 0x00000081
+
+
+STEP 13 — Derive the first 4 key bytes
+
+Magic:
+
+53 30 75 4c
+
+Transformation:
+
+key[i] = magic[i] ^ 0x5A
+
+Calculation:
+
+53 ^ 5A = 09
+30 ^ 5A = 6A
+75 ^ 5A = 2F
+4C ^ 5A = 16
+
+Result:
+
+key[0..3] = 09 6A 2F 16
+
+
+STEP 14 — Derive key bytes from version
+
+Version:
+
+02 00
+
+Little endian:
+
+version_lo = 02
+version_hi = 00
+
+Transformation:
+
+key[4] = version_hi + 0x11
+key[5] = version_lo + 0x11
+
+Calculation:
+
+00 + 11 = 11
+02 + 11 = 13
+
+Result:
+
+key[4..5] = 11 13
+
+
+STEP 15 — Derive key bytes from width
+
+Width:
+
+33 00
+
+Transformation:
+
+key[6] = rol8(width_lo, 3)
+key[7] = rol8(width_hi, 3)
+
+Calculation:
+
+0x33 = 00110011
+
+ROL 3:
+
+00110011
+   |
+   v
+10011001
+
+10011001 = 0x99
+
+Therefore:
+
+key[6] = 99
+key[7] = 00
+
+Result:
+
+key[6..7] = 99 00
+
+
+STEP 16 — Derive key bytes from height
+
+Height:
+
+34 00
+
+Version:
+
+02 00
+
+Transformation:
+
+key[8] = height_lo ^ version_lo
+key[9] = height_hi ^ version_hi
+
+Calculation:
+
+34 ^ 02 = 36
+00 ^ 00 = 00
+
+Result:
+
+key[8..9] = 36 00
+
+
+STEP 17 — Derive key bytes from data length
+
+Data length:
+
+6f 00 00 00
+
+Transformation:
+
+key[i] = data_length[i] ^ 0xA5
+
+Calculation:
+
+6F ^ A5 = CA
+00 ^ A5 = A5
+00 ^ A5 = A5
+00 ^ A5 = A5
+
+Result:
+
+key[10..13] = CA A5 A5 A5
+
+
+STEP 18 — Derive key bytes from checksum
+
+Checksum:
+
+81 00 00 00
+
+Use low byte:
+
+81
+
+For key[14]:
+
+Swap nibbles:
+
+81
+>>
+18
+
+Therefore:
+
+key[14] = 18
+
+For key[15]:
+
+ROL 81 by 1:
+
+10000001
+   |
+   v
+00000011
+
+00000011 = 03
+
+Therefore:
+
+key[15] = 03
+
+
+STEP 19 — Build the 16-byte header
+
+Combine:
+
+09 6A 2F 16
+11 13
+99 00
+36 00
+CA A5 A5 A5
+18 03
+
+>>> Final 16-byte header:
+
+09 6A 2F 16 11 13 99 00 36 00 CA A5 A5 A5 18 03
+
+Hex string:
+
+>>> 096a2f16111399003600caa5a5a51803
+
+
+STEP 20 — Test the header
+
+$ ./metadata_gate 096a2f16111399003600caa5a5a51803
+
+Important output:
+
+>>> Header verified. Proceed to stage2.
+
+This confirms that the derived value is accepted by the program.
+
+
+STEP 21 — Check stage2.dat
+
+$ file stage2.dat
+
+Important output:
+
+stage2.dat: data
+
+
+STEP 22 — Dump stage2.dat
+
+$ od -An -tx1 -v stage2.dat
+
+Important output:
+
+>>> ca 49 63 ca a2 62 b6 ba bb 9a d4 f6 b6 ac 6b 7b
+>>> b2 c9 da 31 fb 01 36 89 5a
+
+Total:
+
+25 bytes
+
+
+STEP 23 — Check for strings
+
+$ strings -a stage2.dat
+
+No useful readable text is found.
+
+So stage2.dat is not normal plaintext.
+
+
+STEP 24 — Understand the decoding
+
+The decoding operation is:
+
+cipher byte
+    |
+    v
+ROR by 3
+    |
+    v
+XOR with key
+    |
+    v
+plaintext
+
+The key has 16 bytes.
+
+stage2.dat has 25 bytes.
+
+Therefore the key repeats:
+
+byte 0  -> key[0]
+byte 1  -> key[1]
+...
+byte 15 -> key[15]
+byte 16 -> key[0]
+byte 17 -> key[1]
+
+
+STEP 25 — Create the decoder
+
+$ nano solve.py
+
+Use:
+
+def ror8(b, n):
+    n %= 8
+    return ((b >> n) | (b << (8 - n))) & 0xff
+
+
+key = bytes.fromhex(
+    "096a2f16111399003600caa5a5a51803"
+)
+
+with open("stage2.dat", "rb") as f:
+    ciphertext = f.read()
+
+plaintext = bytes(
+    ror8(c, 3) ^ key[i % 16]
+    for i, c in enumerate(ciphertext)
+)
+
+print(plaintext)
+
+
+STEP 26 — Run the decoder
+
+$ python3 solve.py
+
+The script applies:
+
+ROR 3
++
+XOR with repeating 16-byte key
+
+and produces the decoded plaintext.
+
+
+STEP 27 — Complete flow
+
+ls -la
+    |
+    v
+sha256sum
+    |
+    v
+file
+    |
+    v
+strings
+    |
+    v
+readelf
+    |
+    v
+.rodata
+    |
+    v
+>>> 0x2110
+    |
+    v
+metadata
+    |
+    v
+transformations
+    |
+    v
+16-byte header
+    |
+    v
+metadata_gate
+    |
+    v
+stage2.dat
+    |
+    v
+ROR 3 + XOR
+    |
+    v
+decoded plaintext
