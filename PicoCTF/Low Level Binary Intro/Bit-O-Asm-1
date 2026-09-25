@@ -1,0 +1,27 @@
+//only basic assembly is required
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ cat disassembler-dump0_a.txt 
+<+0>:     endbr64 
+<+4>:     push   rbp
+<+5>:     mov    rbp,rsp
+<+8>:     mov    DWORD PTR [rbp-0x4],edi
+<+11>:    mov    QWORD PTR [rbp-0x10],rsi
+<+15>:    mov    eax,0x30
+<+20>:    pop    rbp
+<+21>:    ret
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ echo "Important line, mov eax,0x30"
+Important line, mov eax,0x30
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ echo "convert it to text through linux"
+convert it to text through linux
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ printf "%d\n" $((0x30))
+48
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ echo "So the flag is academy{48}"
