@@ -34,12 +34,12 @@ bash: 9fe1a: value too great for base (error token is "9fe1a")
 101
 
 ╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
-╰─🔥 ❯ python -c 'print(654874+101)'
-654975
+╰─🔥 ❯ python -c 'print(654874-101)'
+654773
 
 ╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
-╰─🔥 ❯ echo "So we found the Fucking Flag to be academy{654975}"
-So we found the Fucking Flag to be academy{654975}
+╰─🔥 ❯ echo "So we found the Fucking Flag to be academy{654773}"
+So we found the Fucking Flag to be academy{654773}
 
 
 "GUESS WHO IS A FUCKING GENIUS"
