@@ -1,0 +1,52 @@
+//ssh to next level 
+
+╭─{shaurya@blackarch Desktop/ctfS/overTheWire} 
+╰─🔥 ❯ ssh krypton1@krypton.labs.overthewire.org -p 2231
+password: KRYPTONISGREAT
+
+//Navigate to the correct directory
+
+krypton1@krypton:~$ cd /krypton
+krypton1@krypton:/krypton$ ls
+krypton1  krypton2  krypton3  krypton4  krypton5  krypton6  krypton7
+krypton1@krypton:/krypton$ cd krypton1
+krypton1@krypton:/krypton/krypton1$ ls
+README  krypton2
+krypton1@krypton:/krypton/krypton1$ cat README 
+Welcome to Krypton!
+
+This game is intended to give hands on experience with cryptography
+and cryptanalysis.  The levels progress from classic ciphers, to modern,
+easy to harder.
+
+Although there are excellent public tools, like cryptool,to perform
+the simple analysis, we strongly encourage you to try and do these
+without them for now.  We will use them in later excercises.
+
+** Please try these levels without cryptool first **
+
+
+The first level is easy.  The password for level 2 is in the file 
+'krypton2'.  It is 'encrypted' using a simple rotation called ROT13.  
+It is also in non-standard ciphertext format.  When using alpha characters for
+cipher text it is normal to group the letters into 5 letter clusters, 
+regardless of word boundaries.  This helps obfuscate any patterns.
+
+This file has kept the plain text word boundaries and carried them to
+the cipher text.
+
+Enjoy!
+krypton1@krypton:/krypton/krypton1$ cat krypton2                                             
+YRIRY GJB CNFFJBEQ EBGGRA
+
+
+//solving using cryptoswiss.py all in one cryptography tool, see Security-Tools Repository
+
+╭─{shaurya@blackarch ~/Desktop/tools}  
+╰─🔥 ❯ python cryptoswiss.py 
+Enter input: YRIRY GJB CNFFJBEQ EBGGRA
+Decode chain:
+  1. [Caesar (key=13)]  'YRIRY GJB CNFFJBEQ EBGGRA' -> 'LEVEL TWO PASSWORD ROTTEN'
+
+Final result: LEVEL TWO PASSWORD ROTTEN
+
