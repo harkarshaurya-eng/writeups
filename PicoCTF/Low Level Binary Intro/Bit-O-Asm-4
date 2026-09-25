@@ -1,0 +1,45 @@
+//again same as bit 0 asm, but with jle instruction
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ cat disassembler-dump0_d.txt 
+<+0>:     endbr64 
+<+4>:     push   rbp
+<+5>:     mov    rbp,rsp
+<+8>:     mov    DWORD PTR [rbp-0x14],edi
+<+11>:    mov    QWORD PTR [rbp-0x20],rsi
+<+15>:    mov    DWORD PTR [rbp-0x4],0x9fe1a
+<+22>:    cmp    DWORD PTR [rbp-0x4],0x2710
+<+29>:    jle    0x55555555514e <main+37>
+<+31>:    sub    DWORD PTR [rbp-0x4],0x65
+<+35>:    jmp    0x555555555152 <main+41>
+<+37>:    add    DWORD PTR [rbp-0x4],0x65
+<+41>:    mov    eax,DWORD PTR [rbp-0x4]
+<+44>:    pop    rbp
+<+45>:    ret
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((9fe1a))
+bash: 9fe1a: value too great for base (error token is "9fe1a")
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x9fe1a))
+654874
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x2710))
+10000
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ printf "%d\n" $((0x65))
+101
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ python -c 'print(654874+101)'
+654975
+
+╭─{shaurya@blackarch Desktop/ctfS/picoCTF} 
+╰─🔥 ❯ echo "So we found the Fucking Flag to be academy{654975}"
+So we found the Fucking Flag to be academy{654975}
+
+
+"GUESS WHO IS A FUCKING GENIUS"
