@@ -1,0 +1,11 @@
+//If you are not able to solve this, you are gay!!!
+
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ file "flag (1)" 
+flag (1): ASCII text
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ cat "flag (1)" 
+academy{s4n1ty_v3r1f13d_61ddac22}
+
