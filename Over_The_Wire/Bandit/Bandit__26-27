@@ -1,0 +1,63 @@
+// Bandit Level 26 → Level 27
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: We already have the SSH key from the previous level.
+
+        bandit26.sshkey
+
+Step2: Make the terminal very small and connect as `bandit26`:
+
+        ssh -i /tmp/bandit26.sshkey bandit26@bandit.labs.overthewire.org -p 2220
+
+Step3: Because the shell uses `more`, press:
+
+        v
+
+Step4: This opens the file in `vim`.
+
+Step5: Set the shell to Bash:
+
+        :set shell=/bin/bash
+
+Step6: Start the Bash shell:
+
+        :shell
+
+Step7: We now have a shell as `bandit26`.
+
+Step8: List the files:
+
+        ls
+
+Step9: We can see:
+
+        bandit27-do
+        text.txt
+
+Step10: Check what `bandit27-do` does:
+
+        ./bandit27-do
+
+Step11: It says:
+
+        Run a command as another user.
+        Example: ./bandit27-do id
+
+Step12: The binary is a SUID executable owned by `bandit27`, so it can execute commands with `bandit27` privileges.
+
+Step13: Use it to read the Bandit Level 27 password:
+
+        ./bandit27-do cat /etc/bandit_pass/bandit27
+
+Step14: The password for Bandit Level 27 is:
+
+        3ba3118a22e93127a4ed485be72ef5ea
+
+Step15: The Bandit Level 26 → Level 27 challenge is solved.
+
+Step16: Password for Bandit Level 27:
+
+        3ba3118a22e93127a4ed485be72ef5ea
+
+Step17: Congratulations!! you have solved this problem!!
