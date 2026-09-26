@@ -1,0 +1,71 @@
+// Bandit Level 21 → Level 22
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 21 server:
+
+        ssh bandit21@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 20.
+
+Step3: The challenge tells us that a program is running automatically using `cron`.
+
+Step4: Go to the cron configuration directory:
+
+        cd /etc/cron.d
+
+Step5: List the files:
+
+        ls
+
+Step6: We can see a file related to the next level:
+
+        cronjob_bandit22
+
+Step7: Read the cron job:
+
+        cat cronjob_bandit22
+
+Step8: We see something like:
+
+        * * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+Step9: This means the script `/usr/bin/cronjob_bandit22.sh` is executed every minute as the `bandit22` user.
+
+Step10: Read the script:
+
+        cat /usr/bin/cronjob_bandit22.sh
+
+Step11: The script contains:
+
+        #!/bin/bash
+        chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+        cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+Step12: The important part is:
+
+        cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+Step13: The cron job copies the Bandit Level 22 password into a file in `/tmp`.
+
+Step14: It also runs:
+
+        chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+Step15: Permission `644` means that everyone can read the file.
+
+Step16: Read the file:
+
+        cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+Step17: The password for Bandit Level 22 is:
+
+        tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q
+
+Step18: The Bandit Level 21 → Level 22 challenge is solved.
+
+Step19: Password for Bandit Level 22:
+
+        tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q
+
+Step20: Congratulations!! you have solved this problem!!
