@@ -1,0 +1,64 @@
+// Bandit Level 27 → Level 28
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 27 server:
+
+        ssh bandit27@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 26.
+
+Step3: The challenge gives us a Git repository:
+
+        ssh://bandit27-git@bandit.labs.overthewire.org/home/bandit27-git/repo
+
+Step4: The repository is available through SSH on port `2220`.
+
+Step5: We should clone the repository on our own machine, not inside the Bandit server.
+
+Step6: Create a temporary directory:
+
+        mkdir /tmp/bandit27
+        cd /tmp/bandit27
+
+Step7: Clone the repository:
+
+        git clone ssh://bandit27-git@bandit.labs.overthewire.org:2220/home/bandit27-git/repo
+
+Step8: When Git asks for a password, enter the Bandit Level 27 password.
+
+Step9: Enter the cloned repository:
+
+        cd repo
+
+Step10: List the files:
+
+        ls
+
+Step11: We can see:
+
+        README
+
+Step12: Read the README:
+
+        cat README
+
+Step13: The file contains the password for Bandit Level 28.
+
+Step14: The password reported by recent writeups is:
+
+        Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN
+
+Step15: The important command used in this level is:
+
+        git clone
+
+Step16: This downloads the remote Git repository and creates a local copy containing its files and `.git` directory.
+
+Step17: The Bandit Level 27 → Level 28 challenge is solved.
+
+Step18: Password for Bandit Level 28:
+
+        Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN
+
+Step19: Congratulations!! you have solved this problem!!
