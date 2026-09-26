@@ -1,0 +1,72 @@
+// Bandit Level 31 → Level 32
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to Bandit Level 31:
+
+        ssh bandit31@bandit.labs.overthewire.org -p 2220
+
+Step2: Create a temporary directory:
+
+        mkdir /tmp/bandit31
+        cd /tmp/bandit31
+
+Step3: Clone the repository:
+
+        git clone ssh://bandit31-git@bandit.labs.overthewire.org:2220/home/bandit31-git/repo
+
+Step4: Enter the repository:
+
+        cd repo
+
+Step5: Read the README:
+
+        cat README.md
+
+Step6: The instructions tell us to create a file:
+
+        key.txt
+
+Step7: The file must contain exactly:
+
+        May I come in?
+
+Step8: Create the file:
+
+        echo "May I come in?" > key.txt
+
+Step9: Check `.gitignore`:
+
+        cat .gitignore
+
+Step10: We see that `.txt` files are ignored.
+
+Step11: Force Git to add `key.txt`:
+
+        git add -f key.txt
+
+Step12: Commit the file:
+
+        git commit -m "add key.txt"
+
+Step13: Push the commit to the remote repository:
+
+        git push origin master
+
+Step14: The server-side Git hook checks the submitted file.
+
+Step15: If everything is correct, the server prints the password for Bandit Level 32.
+
+Step16: A recently reported password is:
+
+        pWuj5jBQ6IgV0NXwiH6g1pXRF8S1YvbT
+
+Step17: The important concept is that `.gitignore` can prevent files from being added, but `git add -f` can explicitly force a file to be tracked.
+
+Step18: The Bandit Level 31 → Level 32 challenge is solved.
+
+Step19: Password for Bandit Level 32:
+
+        pWuj5jBQ6IgV0NXwiH6g1pXRF8S1YvbT
+
+Step20: Congratulations!! you have solved this problem!!
