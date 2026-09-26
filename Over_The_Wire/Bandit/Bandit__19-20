@@ -1,0 +1,57 @@
+// Bandit Level 19 → Level 20
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 19 server:
+
+        ssh bandit19@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 18.
+
+Step3: List the files in the home directory:
+
+        ls -la
+
+Step4: We can see a special executable:
+
+        bandit20-do
+
+Step5: Run the binary without arguments to see how it works:
+
+        ./bandit20-do
+
+Step6: It shows that we can use it to run a command as another user:
+
+        Run a command as another user.
+        Example: ./bandit20-do id
+
+Step7: Test which user the command runs as:
+
+        ./bandit20-do whoami
+
+Step8: The output is:
+
+        bandit20
+
+Step9: This means `bandit20-do` is a SUID binary owned by `bandit20`. 
+       When we execute it, the command runs with bandit20's effective privileges.
+
+Step10: The password for the next level is stored at:
+
+        /etc/bandit_pass/bandit20
+
+Step11: Use the SUID binary to read the password:
+
+        ./bandit20-do cat /etc/bandit_pass/bandit20
+
+Step12: The password obtained is:
+
+        0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+
+Step13: The Bandit Level 19 → Level 20 challenge is solved.
+
+Step14: Password for Bandit Level 20:
+
+        0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+
+Step15: Congratulations!! you have solved this problem!!
