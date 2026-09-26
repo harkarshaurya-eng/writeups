@@ -1,0 +1,80 @@
+// Bandit Level 28 → Level 29
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 28 server:
+
+        ssh bandit28@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 27.
+
+Step3: Create a temporary directory:
+
+        mkdir /tmp/bandit28
+        cd /tmp/bandit28
+
+Step4: Clone the Git repository:
+
+        git clone ssh://bandit28-git@bandit.labs.overthewire.org:2220/home/bandit28-git/repo
+
+Step5: Enter the repository:
+
+        cd repo
+
+Step6: List the files:
+
+        ls -la
+
+Step7: Read the README:
+
+        cat README.md
+
+Step8: We can see that the password is hidden:
+
+        # Bandit Notes
+        Some notes for level29 of bandit.
+
+        ## credentials
+
+        - username: bandit29
+        - password: xxxxxxxxxx
+
+Step9: Since this is a Git repository, the old version of the file may still contain the password.
+
+Step10: Check the Git commit history:
+
+        git log
+
+Step11: We can see commits such as:
+
+        fix info leak
+        add missing data
+        initial commit
+
+Step12: The commit called `add missing data` is interesting because it may contain the original password.
+
+Step13: View the complete history and changes:
+
+        git log -p
+
+Step14: We can see the change where the real password was replaced with `xxxxxxxxxx`.
+
+Step15: The old version contains the password for Bandit Level 29.
+
+Step16: The password is:
+
+        4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7
+
+Step17: Another way to inspect the relevant commit is:
+
+        git show <commit_hash>
+
+Step18: The important concept in this level is that deleting a secret from the latest version of a Git file does NOT remove it from Git history.
+
+Step19: The Bandit Level 28 → Level 29 challenge is solved.
+
+Step20: Password for Bandit Level 29:
+
+        4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7
+
+Step21: Congratulations!! you have solved this problem!!
