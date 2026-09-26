@@ -1,0 +1,74 @@
+// Bandit Level 22 → Level 23
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 22 server:
+
+        ssh bandit22@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 21.
+
+Step3: Check the cron jobs:
+
+        cd /etc/cron.d
+        ls
+
+Step4: Read the cron job for Bandit Level 23:
+
+        cat cronjob_bandit23
+
+Step5: We can see that `/usr/bin/cronjob_bandit23.sh` is executed as the `bandit23` user every minute.
+
+Step6: Read the script:
+
+        cat /usr/bin/cronjob_bandit23.sh
+
+Step7: The script contains:
+
+        #!/bin/bash
+        myname=$(whoami)
+        mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+
+        echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+
+        cat /etc/bandit_pass/$myname > /tmp/$mytarget
+
+Step8: Understand the first variable:
+
+        myname=$(whoami)
+
+        Since the cron job runs as `bandit23`, `myname` becomes:
+
+        bandit23
+
+Step9: The next line creates an MD5 hash from:
+
+        I am user bandit23
+
+Step10: We can calculate the same hash ourselves:
+
+        echo I am user bandit23 | md5sum | cut -d ' ' -f 1
+
+Step11: The result is:
+
+        8ca319486bfbbc3663ea0fbe81326349
+
+Step12: Therefore, the password for Bandit Level 23 should have been copied to:
+
+        /tmp/8ca319486bfbbc3663ea0fbe81326349
+
+Step13: Read the file:
+
+        cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+
+Step14: The password for Bandit Level 23 is:
+
+        jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
+
+Step15: The Bandit Level 22 → Level 23 challenge is solved.
+
+Step16: Password for Bandit Level 23:
+
+        jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
+
+Step17: Congratulations!! you have solved this problem!!
