@@ -1,0 +1,41 @@
+// Bandit Level 18 → Level 19
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 18 server:
+
+        ssh bandit18@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 17.
+
+Step3: When we try to log in, we immediately get:
+
+        Byebye!
+
+Step4: This happens because the `.bashrc` file has been modified to log us out immediately when an interactive SSH shell starts. :contentReference[oaicite:0]{index=0}
+
+Step5: Instead of opening an interactive shell, we can directly execute a command through SSH.
+
+Step6: Run:
+
+        ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat readme"
+
+Step7: The command directly executes `cat readme` on the remote server and displays the contents of the `readme` file.
+
+Step8: The password for Bandit Level 19 is:
+
+        cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8
+
+Step9: We can also use:
+
+        ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat *"
+
+Step10: This works because SSH executes the supplied command without giving us the normal interactive Bash session that triggers the modified `.bashrc`. :contentReference[oaicite:1]{index=1}
+
+Step11: The Bandit Level 18 → Level 19 challenge is solved.
+
+Step12: Password for Bandit Level 19:
+
+        cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8
+
+Step13: Congratulations!! you have solved this problem!!
