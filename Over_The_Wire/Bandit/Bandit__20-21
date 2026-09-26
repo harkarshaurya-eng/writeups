@@ -1,0 +1,65 @@
+// Bandit Level 20 → Level 21
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 20 server:
+
+        ssh bandit20@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 19.
+
+Step3: List the files in the home directory:
+
+        ls
+
+Step4: We can see the `suconnect` binary.
+
+Step5: Check how the program works:
+
+        ./suconnect
+
+Step6: It shows:
+
+        Usage: ./suconnect <portnumber>
+
+Step7: The program connects to `localhost` on the port we provide.
+
+        ./suconnect 12345
+
+Step8: We need TWO terminals for this level.
+
+Step9: In Terminal 1, start a Netcat listener:
+
+        nc -l 12345
+
+Step10: Keep Terminal 1 running. It is now waiting for a connection.
+
+Step11: Open Terminal 2 and log in as Bandit 20 again:
+
+        ssh bandit20@bandit.labs.overthewire.org -p 2220
+
+Step12: Run the `suconnect` binary and tell it to connect to our listener:
+
+        ./suconnect 12345
+
+Step13: Go back to Terminal 1.
+
+Step14: Enter the Bandit Level 20 password:
+
+        0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+
+Step15: The `suconnect` program checks the password.
+
+Step16: If the password is correct, it sends the password for Bandit Level 21 back through the connection.
+
+Step17: The password for Bandit Level 21 is:
+
+        EeoULMCra2q0dSkYj561DX7s1CpBuOBt
+
+Step18: The Bandit Level 20 → Level 21 challenge is solved.
+
+Step19: Password for Bandit Level 21:
+
+        EeoULMCra2q0dSkYj561DX7s1CpBuOBt
+
+Step20: Congratulations!! you have solved this problem!!
