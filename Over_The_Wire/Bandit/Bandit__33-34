@@ -1,0 +1,36 @@
+// Bandit Level 33 → Level 34
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to Bandit Level 33:
+
+        ssh bandit33@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 32.
+
+Step3: List the files:
+
+        ls -la
+
+Step4: We can see:
+
+        README.txt
+
+Step5: Read the file:
+
+        cat README.txt
+
+Step6: It tells us that this is the final level of the Bandit wargame.
+
+Step7: There is currently no Level 34.
+
+Step8: Therefore, there is no password to obtain for another level.
+
+Step9: Bandit Level 33 is the final level.
+
+Step10: The Bandit wargame is completed.
+
+Step11: Congratulations!! you have solved this problem!!
+
+OH MY GOD!!!!!!!!!!!!!!!!!!!!!!!!
+FINALLY!!!!!!!!
