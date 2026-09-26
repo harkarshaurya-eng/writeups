@@ -1,0 +1,65 @@
+# Lab: File path traversal, validation of start of path
+
+## Objective
+
+The goal is to exploit the path traversal vulnerability and retrieve the contents of /etc/passwd.
+
+## Solution
+
+1. Open the lab and click on any product image.
+
+2. Open Burp Suite > Proxy > HTTP history and find the request that loads the product image.
+
+3. Send the request to Repeater.
+
+4. Find the filename parameter.
+
+5. The application validates that the supplied path starts with the expected directory.
+
+6. Bypass this validation by keeping the expected directory at the beginning of the path and adding path traversal sequences afterward.
+
+7. Change the filename parameter to:
+
+/var/www/images/../../../etc/passwd
+
+8. Send the request.
+
+9. The response contains the contents of:
+
+/etc/passwd
+
+## Vulnerability Explanation
+
+The application checks whether the supplied filename starts with the expected directory:
+
+/var/www/images/
+
+Because our payload starts with the expected directory, it passes the validation.
+
+The application then resolves the path traversal sequences:
+
+/var/www/images/../../../etc/passwd
+
+The ../ sequences move up through the directories until reaching the root directory:
+
+/var/www/images/
+        ↓ ../
+/var/www/
+        ↓ ../
+/var/
+        ↓ ../
+/
+        ↓
+/etc/passwd
+
+Therefore, the application reads the /etc/passwd file instead of the intended product image.
+
+## Conclusion
+
+The path traversal vulnerability was successfully exploited by placing the expected directory at the beginning of the path and then using traversal sequences:
+
+/var/www/images/../../../etc/passwd
+
+The contents of /etc/passwd were successfully retrieved.
+
+Congratulations!! you have solved this problem!!
