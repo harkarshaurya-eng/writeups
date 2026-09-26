@@ -1,0 +1,61 @@
+// Bandit Level 32 → Level 33
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to Bandit Level 32:
+
+        ssh bandit32@bandit.labs.overthewire.org -p 2220
+
+Step2: We are placed inside the:
+
+        WELCOME TO THE UPPERCASE SHELL
+
+Step3: The shell converts everything we type to uppercase.
+
+Step4: For example:
+
+        ls
+
+Step5: becomes:
+
+        LS
+
+Step6: Normal commands therefore do not work.
+
+Step7: We can use the special shell variable:
+
+        $0
+
+Step8: Enter:
+
+        $0
+
+Step9: `$0` represents the name/path of the current shell.
+
+Step10: This gives us a normal shell.
+
+Step11: Check the current user:
+
+        whoami
+
+Step12: The output is:
+
+        bandit33
+
+Step13: Read the final password:
+
+        cat /etc/bandit_pass/bandit33
+
+Step14: A recently reported password is:
+
+        u4P2CyPOwPGLe94RdD9Uo2FxFwvnFswM
+
+Step15: The important concept is escaping a restricted shell using shell variables.
+
+Step16: The Bandit Level 32 → Level 33 challenge is solved.
+
+Step17: Password for Bandit Level 33:
+
+        u4P2CyPOwPGLe94RdD9Uo2FxFwvnFswM
+
+Step18: Congratulations!! you have solved this problem!!
