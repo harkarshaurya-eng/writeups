@@ -1,0 +1,54 @@
+// Bandit Level 30 → Level 31
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to Bandit Level 30:
+
+        ssh bandit30@bandit.labs.overthewire.org -p 2220
+
+Step2: Create a temporary directory:
+
+        mkdir /tmp/bandit30
+        cd /tmp/bandit30
+
+Step3: Clone the repository:
+
+        git clone ssh://bandit30-git@bandit.labs.overthewire.org:2220/home/bandit30-git/repo
+
+Step4: Enter the repository:
+
+        cd repo
+
+Step5: Read the README:
+
+        cat README.md
+
+Step6: The README does not contain the password.
+
+Step7: Check the Git tags:
+
+        git tag
+
+Step8: We find a tag called:
+
+        secret
+
+Step9: Display the contents of the tag:
+
+        git show secret
+
+Step10: The password for Bandit Level 31 is displayed.
+
+Step11: A recently reported password is:
+
+        82NkymblpGBYmIXG6ZQ8YldBYstHpfUf
+
+Step12: The important concept is that Git tags can contain information that is not visible in the current working files.
+
+Step13: The Bandit Level 30 → Level 31 challenge is solved.
+
+Step14: Password for Bandit Level 31:
+
+        82NkymblpGBYmIXG6ZQ8YldBYstHpfUf
+
+Step15: Congratulations!! you have solved this problem!!
