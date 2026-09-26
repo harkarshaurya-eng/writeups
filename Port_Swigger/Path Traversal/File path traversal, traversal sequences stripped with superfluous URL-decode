@@ -1,0 +1,63 @@
+# Lab: File path traversal, traversal sequences stripped with superfluous URL-decode
+
+## Objective
+
+The goal is to exploit the path traversal vulnerability and retrieve the contents of /etc/passwd.
+
+## Solution
+
+1. Open the lab and click on any product image.
+
+2. Open Burp Suite > Proxy > HTTP history and find the request that loads the product image.
+
+3. Send the request to Repeater.
+
+4. Find the filename parameter.
+
+5. Since normal traversal sequences such as ../ are blocked, use double URL encoding.
+
+6. Change the filename parameter to:
+
+..%252f..%252f..%252fetc/passwd
+
+7. Send the request.
+
+8. The response contains the contents of:
+
+/etc/passwd
+
+## Vulnerability Explanation
+
+The application first checks the input for path traversal sequences and then performs another URL decode.
+
+The / character is double URL-encoded:
+
+%252f
+
+It is decoded in two stages:
+
+%252f
+   ↓
+%2f
+   ↓
+/
+
+Therefore:
+
+..%252f..%252f..%252fetc/passwd
+
+eventually becomes:
+
+../../../etc/passwd
+
+The traversal filter runs before the second decoding, allowing the malicious path to bypass the filter.
+
+## Conclusion
+
+The path traversal vulnerability was successfully exploited using double URL encoding:
+
+..%252f..%252f..%252fetc/passwd
+
+The contents of /etc/passwd were successfully retrieved.
+
+Congratulations!! you have solved this problem!!
