@@ -1,0 +1,64 @@
+// Bandit Level 29 → Level 30
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 29 server:
+
+        ssh bandit29@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 28.
+
+Step3: Create a temporary directory:
+
+        mkdir /tmp/bandit29
+        cd /tmp/bandit29
+
+Step4: Clone the Git repository:
+
+        git clone ssh://bandit29-git@bandit.labs.overthewire.org:2220/home/bandit29-git/repo
+
+Step5: Enter the repository:
+
+        cd repo
+
+Step6: Read the README:
+
+        cat README.md
+
+Step7: We see that there is no password in the production branch.
+
+Step8: This gives us a clue that the password may exist in another Git branch.
+
+Step9: List all local and remote branches:
+
+        git branch -a
+
+Step10: We can see a `dev` branch:
+
+        remotes/origin/dev
+
+Step11: Switch to the `dev` branch:
+
+        git checkout dev
+
+Step12: Read the README again:
+
+        cat README.md
+
+Step13: The README on the `dev` branch contains the credentials for Bandit Level 30.
+
+Step14: The password reported by a recent 2026 writeup is:
+
+        jq9Dfg2rXsfYsWMgFuKlXhphjdH7USgX
+
+Step15: The important concept in this level is that Git branches can contain different versions of the same files.
+
+Step16: The password was not on the `master` branch, but it was present on the `dev` branch.
+
+Step17: The Bandit Level 29 → Level 30 challenge is solved.
+
+Step18: Password for Bandit Level 30:
+
+        jq9Dfg2rXsfYsWMgFuKlXhphjdH7USgX
+
+Step19: Congratulations!! you have solved this problem!!
