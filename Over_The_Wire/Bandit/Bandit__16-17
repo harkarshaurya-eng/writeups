@@ -1,0 +1,51 @@
+// Bandit Level 16 → Level 17
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 16 server using SSH:
+
+        ssh bandit16@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 15.
+
+Step3: The next credentials are available through a service running on localhost in the port range `31000` to `32000`.
+
+Step4: Scan the port range:
+
+        nmap -p 31000-32000 localhost
+
+Step5: Find the open ports and identify which ones support SSL/TLS:
+
+        nmap -sV -p 31000-32000 localhost
+
+Step6: Connect to the SSL/TLS service on port `31790`:
+
+        openssl s_client -connect localhost:31790
+
+Step7: Enter the Bandit Level 16 password and press Enter.
+
+Step8: The correct service returns an RSA private key for the next level.
+
+Step9: Save the private key:
+
+        nano /tmp/bandit17.key
+
+Step10: Set the correct permissions:
+
+        chmod 600 /tmp/bandit17.key
+
+Step11: Use the private key to log in to Bandit Level 17:
+
+        ssh -i /tmp/bandit17.key bandit17@bandit.labs.overthewire.org -p 2220
+
+Step12: Read the password for Bandit Level 17:
+
+        cat /etc/bandit_pass/bandit17
+
+Step13: The password obtained is:
+
+        xLYVMN9WE5zQ5vHacb0sZEVqbrp7nBTn
+
+Step14: The Bandit Level 16 → Level 17 challenge is solved.
+
+Step15: Congratulations!! you have solved this problem!!
