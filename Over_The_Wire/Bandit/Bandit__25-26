@@ -1,0 +1,88 @@
+// Bandit Level 25 → Level 26
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 25 server:
+
+        ssh bandit25@bandit.labs.overthewire.org -p 2220
+
+Step2: Enter the password obtained from Bandit Level 24.
+
+Step3: List the files:
+
+        ls -la
+
+Step4: We can see a private SSH key:
+
+        bandit26.sshkey
+
+Step5: Read the key:
+
+        cat bandit26.sshkey
+
+Step6: Copy the private key to a temporary file on your local machine:
+
+        nano /tmp/bandit26.sshkey
+
+Step7: Paste the private key into the file and save it.
+
+Step8: Set the correct permissions:
+
+        chmod 600 /tmp/bandit26.sshkey
+
+Step9: Try to connect to Bandit Level 26 using the SSH key:
+
+        ssh -i /tmp/bandit26.sshkey bandit26@bandit.labs.overthewire.org -p 2220
+
+Step10: Instead of getting a normal shell, the connection immediately closes.
+
+Step11: The reason is that the Bandit 26 user's login shell is not `/bin/bash`. It uses a program called:
+
+        /usr/bin/showtext
+
+Step12: We need to exploit the way the SSH connection starts this program.
+
+Step13: The terminal window must be made very small before connecting.
+
+Step14: Resize the terminal to a very small size.
+
+Step15: Connect again:
+
+        ssh -i /tmp/bandit26.sshkey bandit26@bandit.labs.overthewire.org -p 2220
+
+Step16: The `showtext` program opens a text file using `more`.
+
+Step17: Because the terminal is very small, `more` enters its interactive mode instead of immediately exiting.
+
+Step18: Press:
+
+        v
+
+Step19: This opens the file in `vim`.
+
+Step20: Inside `vim`, we can start a shell by entering:
+
+        :set shell=/bin/bash
+        :shell
+
+Step21: We now have a shell as `bandit26`.
+
+Step22: Check the current user:
+
+        whoami
+
+Step23: The output should be:
+
+        bandit26
+
+Step24: Read the password for Bandit Level 27:
+
+        cat /etc/bandit_pass/bandit26
+
+Step25: The password for Bandit Level 27 is:
+
+        [password returned by the live server]
+
+Step26: The Bandit Level 25 → Level 26 challenge is solved.
+
+Step27: Congratulations!! you have solved this problem!!
