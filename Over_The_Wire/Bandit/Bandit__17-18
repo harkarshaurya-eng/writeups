@@ -1,0 +1,56 @@
+// Bandit Level 17 → Level 18
+
+URL: https://overthewire.org/wargames/bandit/
+
+Step1: Log in to the Bandit Level 17 server using the SSH key obtained from the previous level:
+
+        ssh -i /tmp/bandit17.key bandit17@bandit.labs.overthewire.org -p 2220
+
+Step2: List the files in the home directory:
+
+        ls
+
+Step3: We can see two files:
+
+        passwords.new
+        passwords.old
+
+Step4: The password for the next level is in `passwords.new` and is the only line that is different between the two files.
+
+Step5: Use the `diff` command to compare the two files:
+
+        diff passwords.old passwords.new
+
+Step6: The output shows one changed line.
+
+        < old password
+        ---
+        > new password
+
+Step7: The line beginning with `>` belongs to `passwords.new`, so that is the password for Bandit Level 18.
+
+Step8: The password found online is:
+
+        x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+
+Step9: Try logging into Bandit Level 18:
+
+        ssh bandit18@bandit.labs.overthewire.org -p 2220
+
+Step10: Enter the password:
+
+        x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+
+Step11: If you see:
+
+        Byebye!
+
+        this is normal. It is part of the next challenge, Bandit 18 → 19.
+
+Step12: The Bandit Level 17 → Level 18 challenge is solved.
+
+Step13: Password for Bandit Level 18:
+
+        x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+
+Step14: Congratulations!! you have solved this problem!!
