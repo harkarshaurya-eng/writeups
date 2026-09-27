@@ -1,0 +1,230 @@
+# Lab: Brute-forcing using response timing
+
+## Objective
+
+Exploit a response timing difference to identify a valid username and then brute-force the corresponding password while bypassing the application's IP-based brute-force protection.
+
+## Solution
+
+### Step 1: Open the login page
+
+Open the lab and navigate to:
+
+/login
+
+Submit an incorrect username and password and capture the request in Burp Suite.
+
+Send the request to:
+
+Burp Suite → Intruder
+
+### Step 2: Configure the username enumeration attack
+
+Set the Intruder attack type to:
+
+Pitchfork
+
+Add an X-Forwarded-For header and mark it as the first payload position:
+
+X-Forwarded-For: §1.1.1.1§
+
+Mark the username as the second payload position:
+
+username=§username§
+
+Use a long password to amplify the response-time difference:
+
+password=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+The request should look similar to:
+
+POST /login HTTP/2
+Host: YOUR-LAB-ID.web-security-academy.net
+X-Forwarded-For: §1.1.1.1§
+Content-Type: application/x-www-form-urlencoded
+
+username=§username§&password=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+### Step 3: Configure Payload Set 1
+
+Payload set 1 corresponds to X-Forwarded-For.
+
+Use different IP addresses so that the requests appear to originate from different client IPs.
+
+Example:
+
+1.1.1.1
+1.1.1.2
+1.1.1.3
+1.1.1.4
+...
+1.1.1.101
+
+There should be one IP value for each username in the username wordlist.
+
+### Step 4: Configure Payload Set 2
+
+Payload set 2 corresponds to the username.
+
+Use the provided username wordlist.
+
+The relevant username discovered during the attack was:
+
+afiliados
+
+Pitchfork pairs the payloads by position:
+
+1.1.1.1  → username 1
+1.1.1.2  → username 2
+1.1.1.3  → username 3
+...
+corresponding IP → afiliados
+
+### Step 5: Run the username attack
+
+Start the Intruder attack.
+
+Look at:
+
+Response received
+
+and:
+
+Response completed
+
+Response received represents the time taken to receive the response.
+
+Most invalid usernames should have similar response times, while a valid username can produce a noticeably longer response.
+
+Identify the username with the significant timing difference.
+
+The valid username found was:
+
+afiliados
+
+### Step 6: Configure the password attack
+
+Now create a second Intruder attack.
+
+Keep the username fixed:
+
+username=afiliados
+
+Place the password as the second payload position:
+
+password=§PASSWORD§
+
+Keep X-Forwarded-For as the first payload position:
+
+X-Forwarded-For: §1.1.1.1§
+
+The request should look like:
+
+POST /login HTTP/2
+Host: YOUR-LAB-ID.web-security-academy.net
+X-Forwarded-For: §1.1.1.1§
+Content-Type: application/x-www-form-urlencoded
+
+username=afiliados&password=§PASSWORD§
+
+### Step 7: Configure the password payloads
+
+Use the provided password wordlist as Payload Set 2.
+
+For Payload Set 1, use a different IP address for each password.
+
+For example:
+
+1.1.1.1
+1.1.1.2
+1.1.1.3
+1.1.1.4
+...
+1.1.1.100
+
+The password list contains 100 passwords, so use 100 corresponding IP values.
+
+### Step 8: Run the password attack
+
+Start the Intruder attack.
+
+For this stage, response timing is not necessarily the useful indicator.
+
+Instead, compare:
+
+Status code
+Response length
+
+Most incorrect login attempts should have the same general response characteristics.
+
+The correct password produces a different authentication response, such as a redirect:
+
+HTTP/2 302
+
+However, do not rely on the status code alone. Open the suspicious request and verify that it redirects to the authenticated page or otherwise shows successful authentication.
+
+The password corresponding to the successful request is the valid password for:
+
+Username: afiliados
+
+Password: YOUR_DISCOVERED_PASSWORD
+
+### Step 9: Log in normally
+
+After discovering the credentials, use them on the login page:
+
+Username:
+afiliados
+
+Password:
+YOUR_DISCOVERED_PASSWORD
+
+The X-Forwarded-For header was required during the brute-force/enumeration attack to bypass the lab's IP-based rate limiting. It is not part of the credentials themselves.
+
+## Vulnerability Explanation
+
+The application uses IP-based brute-force protection.
+
+However, it trusts the X-Forwarded-For HTTP header when determining the client's IP address.
+
+By changing the header between requests:
+
+X-Forwarded-For: 1.1.1.1
+X-Forwarded-For: 1.1.1.2
+X-Forwarded-For: 1.1.1.3
+
+the requests are treated as coming from different client IP addresses by the vulnerable application.
+
+The application also processes valid and invalid usernames differently. By using a long password, this difference becomes large enough to observe through response timing.
+
+The attack therefore works in two stages:
+
+X-Forwarded-For + Username
+            ↓
+    Measure response time
+            ↓
+   Identify valid username
+            ↓
+     Username: afiliados
+            ↓
+X-Forwarded-For + Password
+            ↓
+   Compare login responses
+            ↓
+    Identify valid password
+            ↓
+       Successful login
+
+## Conclusion
+
+The lab demonstrates how response timing differences can be used to enumerate valid usernames.
+
+It also demonstrates how trusting the X-Forwarded-For header can allow IP-based brute-force protection to be bypassed when the application does not properly restrict which proxies are trusted.
+
+The valid username discovered was:
+
+apollo password: matthew
+
+The password was then identified by brute-forcing the password list while using different X-Forwarded-For values.
+
+Congratulations!! you have solved this problem!!
