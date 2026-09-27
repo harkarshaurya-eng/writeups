@@ -1,0 +1,103 @@
+# Lab: Username enumeration via subtly different responses
+
+## Objective
+
+Enumerate a valid username by identifying a subtle difference in the login response, brute-force the user's password, and access their account page.
+
+## Solution
+
+Step 1: Open the lab login page and submit an invalid username and password.
+
+        Username: test
+        Password: test
+
+Step 2: Capture the login request in Burp Suite.
+
+        Burp Suite → Proxy → HTTP history
+
+Step 3: Send the login request to Intruder.
+
+        Right-click the POST /login request
+        → Send to Intruder
+
+Step 4: Set the username as the payload position.
+
+        username=§test§&password=test
+
+Step 5: Go to the Payloads tab.
+
+        Payload type: Simple list
+
+        Paste the candidate usernames provided by PortSwigger.
+
+Step 6: Configure Grep - Extract.
+
+        Intruder → Settings → Grep - Extract → Add
+
+        Find the following response:
+
+        <p class=is-warning>Invalid username or password.</p>
+
+        Select only:
+
+        Invalid username or password.
+
+        Click OK.
+
+Step 7: Start the Intruder attack.
+
+        Look at the Grep - Extract column.
+
+        Most usernames will return:
+
+        Invalid username or password.
+
+        One username will have a subtly different response.
+
+        The difference is a trailing space instead of the normal
+        full stop formatting.
+
+Step 8: Identify and record the username with the different response.
+
+        If the difference is difficult to see:
+        - Sort the Grep - Extract column.
+        - Open the unusual response.
+        - Use Burp Comparer to compare it with a normal response.
+
+Step 9: Change the Intruder payload position from username to password.
+
+        username=VALID_USERNAME&password=§invalid-password§
+
+Step 10: Go to the Payloads tab.
+
+        Payload type: Simple list
+
+        Paste the candidate passwords provided by PortSwigger.
+
+Step 11: Start the password attack.
+
+        Check the Status code and response length.
+
+        Incorrect passwords normally return:
+
+        200
+
+        The correct password returns:
+
+        302
+
+Step 12: Record the correct password.
+
+        Password: daniel
+
+Step 13: Return to the login page and log in using the discovered
+username and password.
+
+        Username: VALID_USERNAME
+        Password: daniel
+
+Step 14: Access the user's account page.
+
+        The lab should now be marked as solved.
+
+Congratulations!! you have solved this problem!!
