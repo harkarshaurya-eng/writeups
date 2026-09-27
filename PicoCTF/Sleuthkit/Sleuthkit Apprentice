@@ -1,0 +1,64 @@
+// solved directly, forensics basic commands like- mmls, fdisk, icat, istat
+
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ mmls disk.flag.img 
+DOS Partition Table
+Offset Sector: 0
+Units are in 512-byte sectors
+
+      Slot      Start        End          Length       Description
+000:  Meta      0000000000   0000000000   0000000001   Primary Table (#0)
+001:  -------   0000000000   0000002047   0000002048   Unallocated
+002:  000:000   0000002048   0000206847   0000204800   Linux (0x83)
+003:  000:001   0000206848   0000360447   0000153600   Linux Swap / Solaris x86 (0x82)
+004:  000:002   0000360448   0000614399   0000253952   Linux (0x83)
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ fls -o 360448 disk.flag.img 
+d/d 451:	home
+d/d 11:	lost+found
+d/d 12:	boot
+d/d 1985:	etc
+d/d 1986:	proc
+d/d 1987:	dev
+d/d 1988:	tmp
+d/d 1989:	lib
+d/d 1990:	var
+d/d 3969:	usr
+d/d 3970:	bin
+d/d 1991:	sbin
+d/d 1992:	media
+d/d 1993:	mnt
+d/d 1994:	opt
+d/d 1995:	root
+d/d 1996:	run
+d/d 1997:	srv
+d/d 1998:	sys
+d/d 2358:	swap
+V/V 31745:	$OrphanFiles
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ fls -o disk.flag.img 451
+Invalid image offset (tsk_parse: invalid image offset: disk.flag.img)
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ fls -o 360448 disk.flag.img 451
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ fls -o 360448 disk.flag.img 1995
+r/r 2363:	.ash_history
+d/d 3981:	my_folder
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ fls -o 360448 disk.flag.img 3981
+r/r * 2082(realloc):	flag.txt
+r/r 2371:	flag.uni.txt
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ icat 360448 disk.flag.img 2371
+Error stat(ing) image file (raw_open: image "360448" - No such file or directory)
+
+╭─{shaurya@blackarch ~/Downloads}  
+╰─🔥 ❯ icat -o 360448 disk.flag.img 2371
+academy{by73_5urf3r_6395be48}
