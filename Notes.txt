@@ -1,0 +1,97 @@
+//This file is specially made to track my learning progress on daily basis, stupid people can read and understand from my personal Notes.
+
+#Forensics
+-->read disk partition - mmls, make and control partitions on disk - fdisk
+-->fls - List file and directory names in a disk image.
+
+Tool	Looks at	Main purpose
+
+1)fdisk	Disk	       Partition table and partitions
+2)mmls	Disk image	Forensic partition layout
+3)fls	Filesystem	Files and directories
+4)istat	Inode	       File metadata
+5)icat	File	       File contents
+ 
+#CURL Notes --
+$man curl (for info)
+$curl -h for basic commands 
+
+-->Knows 24 transfer protocols 
+-->230 command line options 
+ 	**IMP**
+		To find info about a particular flag use this command 
+	ex: curl -s <URL>
+		$curl --help all | grep -A 2 -- "-s,"
+
+		where -- means stop interpreting as options 
+
+--> -s 
+	silent 
+
+--> -i
+	response headers + response body
+	$curl -i pccoepune.com
+
+--> For json
+	$ curl https://example.com/json | jq
+
+--> -I Response headers only 
+	$ curl -I pccoepune.com
+
+--> -v verbose : make the operation more talkative
+	$ curl -v pccoepune.com 
+
+-->-L follow the redirect 
+	$ curl -L anantya.vercel.app
+
+-->-X <request method>
+	$ curl -X POST https://api.example.com/users
+
+-->-H header type
+-->-d content
+ 	so finally the request becomes:
+		$ curl -X POST https://api.example/users -H "content-type: application/json"
+		 -d "{"name":"S", ID:"319"}"
+			
+			Date: 8th October, 2026
+		
+## API Testing ##
+
+--> look for documentation of APIs in the website:
+	-> /api
+	-> /swagger/index.html
+	-> /openapi.json
+
+
+--> Use Burp crawler to crawl the site for APIs and audit OpenApi documentations 
+    or any other documentation in JSON or YAML format.
+--> Parse the documentation using OpenAPI Parse App.
+--> Tools - Postman, SoapUI
+--> Also some APIs might not be triggered by the crawlers through browsing,
+    so look for JS files for other references to the hidden APIs.
+
+
+-->Then after that find the HTTP Methods the API supports.
+	->To do this use the burp HTTP verb list in intruder to automatically cycle through
+	 a range of methods.
+-->then identify supported content types: modify the content-type header.
+	Types of bugs:
+	->By pass flawed defences.
+	->differences in processing logic.
+	->trigger errors to disclose additional information.
+
+  ** Always put the " Content-Type " Header after the header " Accept: */*  "
+
+-->Sometimes there are hidden parameters to the APIs, which can alter the behaviour of
+the application in various ways, to find these you can use: 
+"" Param miner BApp ""
+ which can guess upto 65,535 params names per requests, it automatically guesses names that are relevant 
+to the application based on the info taken from scope.
+
+
+-->Mass assignment vulnerabilities 
+	1)this is also called auto binding, this can advertently create hidden parameters
+	which were never intended to be processed by the developer.
+
+	2)This happens when - software frameworks automatically bind request parameters
+	to fields on an internal object, so again attacker controlled input directly processed.
