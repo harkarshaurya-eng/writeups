@@ -95,3 +95,5 @@ to the application based on the info taken from scope.
 
 	2)This happens when - software frameworks automatically bind request parameters
 	to fields on an internal object, so again attacker controlled input directly processed.
+
+
